@@ -1,0 +1,3570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CS//ARCHIVE — Foro &amp; Wiki Táctica de Counter-Strike</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-main: #0f1215;
+      --bg-surface: #181c22;
+      --bg-surface-2: #1f252e;
+      --bg-surface-3: #252c37;
+      --border: #2a323e;
+      --border-strong: #394454;
+      --text-primary: #eef2f6;
+      --text-secondary: #a2aebf;
+      --text-muted: #6e7b8d;
+
+      /* Counter-Strike Official Accents & Rarities */
+      --cs-gold: #de9b35;
+      --cs-gold-bright: #f4b850;
+      --cs-gold-dim: rgba(222, 155, 53, 0.14);
+      --ct-blue: #4b69ff;
+      --ct-sky: #5e98d9;
+      --t-red: #eb4b4b;
+      --rarity-consumer: #b0c3d9;
+      --rarity-industrial: #5e98d9;
+      --rarity-milspec: #4b69ff;
+      --rarity-restricted: #8847ff;
+      --rarity-classified: #d32ce6;
+      --rarity-covert: #eb4b4b;
+      --rarity-contraband: #e4ae39;
+      --rarity-gold: #ffd700;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.35);
+      --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.72);
+      --font-display: 'Rajdhani', 'Segoe UI', sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-main);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(222, 155, 53, 0.07), transparent 42%),
+        radial-gradient(circle at 85% 10%, rgba(75, 105, 255, 0.06), transparent 38%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--cs-gold-bright);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-main);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--cs-gold);
+    }
+
+    /* ================= HEADER / NAVBAR ================= */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(15, 18, 21, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-inner {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 0.7rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .brand:hover {
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #de9b35 0%, #9b6414 100%);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 18px rgba(222, 155, 53, 0.3);
+      border: 1px solid rgba(255, 224, 153, 0.35);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.38rem;
+      letter-spacing: 0.06em;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .brand-title span {
+      color: var(--cs-gold);
+    }
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Search box */
+    .search-wrap {
+      position: relative;
+      flex: 1 1 280px;
+      max-width: 440px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      width: 16px;
+      height: 16px;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.56rem 4.2rem 0.56rem 2.45rem;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--cs-gold);
+      box-shadow: 0 0 0 3px rgba(222, 155, 53, 0.16);
+    }
+    .search-clear {
+      position: absolute;
+      right: 2.3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0.2rem 0.35rem;
+      display: none;
+    }
+    .search-clear.visible {
+      display: block;
+    }
+    .search-clear:hover {
+      color: #fff;
+    }
+    .search-kbd {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.42rem;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    /* Quick nav tabs */
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-left: auto;
+    }
+    .nav-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .nav-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      padding: 0.42rem 0.78rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.94rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+    }
+    .nav-tab:hover {
+      color: #fff;
+      background: var(--bg-surface-2);
+    }
+    .nav-tab.active {
+      color: #111;
+      background: var(--cs-gold);
+      border-color: var(--cs-gold-bright);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: var(--radius-sm);
+      padding: 0.48rem 0.68rem;
+      margin-left: auto;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.88rem;
+    }
+
+    /* ================= MAIN 3-COLUMN LAYOUT ================= */
+    .layout {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 1.25rem;
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr) 304px;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .sidebar-left,
+    .sidebar-right {
+      position: sticky;
+      top: 78px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cs-gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-bottom: 0.6rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Left Sidebar Wiki Index */
+    .wiki-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .wiki-nav-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.68rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      text-align: left;
+      transition: all 0.16s ease;
+    }
+    .wiki-nav-btn:hover {
+      background: var(--bg-surface-2);
+      color: #fff;
+    }
+    .wiki-nav-btn.active {
+      background: var(--cs-gold-dim);
+      border-color: rgba(222, 155, 53, 0.45);
+      color: var(--cs-gold-bright);
+      font-weight: 600;
+    }
+    .wiki-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-width: 0;
+    }
+    .wiki-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .wiki-count {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.08rem 0.42rem;
+      border-radius: 999px;
+      background: var(--bg-surface-2);
+      color: var(--text-muted);
+    }
+    .wiki-nav-btn.active .wiki-count {
+      background: rgba(222, 155, 53, 0.25);
+      color: var(--cs-gold-bright);
+    }
+
+    .server-status {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      font-size: 0.82rem;
+    }
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-secondary);
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: #5eead4;
+      background: rgba(94, 234, 212, 0.1);
+      border: 1px solid rgba(94, 234, 212, 0.28);
+      padding: 0.12rem 0.48rem;
+      border-radius: 999px;
+    }
+    .pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #2dd4bf;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.8); }
+    }
+
+    .quick-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .quick-link {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding: 0.35rem 0.5rem;
+      border-radius: 5px;
+      border-left: 2px solid var(--border-strong);
+      transition: all 0.15s;
+      background: transparent;
+      border-top: none;
+      border-right: none;
+      border-bottom: none;
+      text-align: left;
+    }
+    .quick-link:hover {
+      color: #fff;
+      border-left-color: var(--cs-gold);
+      background: var(--bg-surface-2);
+    }
+
+    /* ================= CENTER FEED ================= */
+    .feed {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      min-width: 0;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+      background: linear-gradient(125deg, #161c26 0%, #1d2330 52%, #2a2117 100%);
+      padding: 1.45rem 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+    .hero-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 88% 20%, rgba(222, 155, 53, 0.22), transparent 44%),
+        radial-gradient(circle at 12% 85%, rgba(75, 105, 255, 0.16), transparent 42%);
+      pointer-events: none;
+    }
+    .hero-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cs-gold-bright);
+      background: rgba(222, 155, 53, 0.14);
+      border: 1px solid rgba(222, 155, 53, 0.36);
+      padding: 0.22rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.6rem;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.65rem, 2.6vw, 2.3rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
+    }
+    .hero-title span {
+      color: var(--cs-gold);
+    }
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+      max-width: 650px;
+    }
+    .hero-stats {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.05rem;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      background: rgba(15, 18, 21, 0.65);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.45rem 0.8rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.45rem;
+    }
+    .hero-stat strong {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--cs-gold-bright);
+    }
+    .hero-stat span {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Feed Controls Bar */
+    .feed-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.95rem;
+    }
+    .feed-info {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+    }
+    .feed-info strong {
+      color: #fff;
+    }
+    .sort-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .sort-btn {
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.34rem 0.72rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.16s;
+    }
+    .sort-btn:hover {
+      color: #fff;
+      border-color: var(--border-strong);
+    }
+    .sort-btn.active {
+      background: var(--cs-gold-dim);
+      border-color: var(--cs-gold);
+      color: var(--cs-gold-bright);
+    }
+
+    /* Thread Card */
+    .thread-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: border-color 0.2s ease;
+    }
+    .thread-card:hover {
+      border-color: var(--border-strong);
+    }
+
+    .thread-shell {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+    }
+
+    /* Upvote Column */
+    .vote-col {
+      background: rgba(15, 18, 21, 0.42);
+      border-right: 1px solid var(--border);
+      padding: 1rem 0.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .vote-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      display: grid;
+      place-items: center;
+      transition: all 0.16s ease;
+    }
+    .vote-btn:hover {
+      border-color: var(--cs-gold);
+      color: var(--cs-gold-bright);
+      transform: translateY(-1px);
+    }
+    .vote-btn.voted {
+      background: var(--cs-gold);
+      border-color: var(--cs-gold-bright);
+      color: #111;
+      box-shadow: 0 0 14px rgba(222, 155, 53, 0.35);
+    }
+    .vote-count {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+    .vote-btn.voted + .vote-count {
+      color: var(--cs-gold-bright);
+    }
+    .vote-label {
+      font-size: 0.62rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Thread Body */
+    .thread-main {
+      padding: 1.15rem 1.3rem 1.25rem;
+      min-width: 0;
+    }
+    .thread-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.55rem;
+    }
+    .author-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .author-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: #111;
+    }
+    .role-chip {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      padding: 0.08rem 0.42rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.65rem;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.16rem 0.52rem;
+      border-radius: 4px;
+      border: 1px solid transparent;
+    }
+    .tag-gold { background: rgba(222, 155, 53, 0.15); color: #f4b850; border-color: rgba(222, 155, 53, 0.35); }
+    .tag-ct { background: rgba(75, 105, 255, 0.16); color: #8da2ff; border-color: rgba(75, 105, 255, 0.38); }
+    .tag-t { background: rgba(235, 75, 75, 0.16); color: #ff8080; border-color: rgba(235, 75, 75, 0.38); }
+    .tag-purple { background: rgba(136, 71, 255, 0.16); color: #b794ff; border-color: rgba(136, 71, 255, 0.38); }
+    .tag-pink { background: rgba(211, 44, 230, 0.15); color: #ed82f7; border-color: rgba(211, 44, 230, 0.36); }
+    .tag-sky { background: rgba(94, 152, 217, 0.16); color: #8ec1f7; border-color: rgba(94, 152, 217, 0.36); }
+
+    .thread-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.6rem;
+    }
+    .thread-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.32rem, 1.9vw, 1.62rem);
+      font-weight: 700;
+      line-height: 1.16;
+      letter-spacing: 0.015em;
+      color: #fff;
+    }
+    .toggle-btn {
+      flex-shrink: 0;
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      padding: 0.3rem 0.65rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.16s;
+    }
+    .toggle-btn:hover {
+      color: #fff;
+      border-color: var(--cs-gold);
+    }
+
+    .thread-lead {
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+      margin-bottom: 1rem;
+    }
+
+    .thread-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.05rem;
+    }
+    .thread-card.collapsed .thread-content,
+    .thread-card.collapsed .comments-section {
+      display: none;
+    }
+
+    /* Media banner inside threads */
+    .media-frame {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #12161c;
+      aspect-ratio: 16 / 6.5;
+    }
+    .media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .media-caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.65rem 0.9rem;
+      background: linear-gradient(transparent, rgba(10, 12, 15, 0.92));
+      font-size: 0.78rem;
+      color: #d6dde7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .media-caption span.mono {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--cs-gold-bright);
+    }
+
+    /* Prose & Callouts */
+    .wiki-prose p {
+      color: #cad3df;
+      font-size: 0.92rem;
+      margin-bottom: 0.7rem;
+    }
+    .wiki-prose p:last-child {
+      margin-bottom: 0;
+    }
+    .wiki-prose strong {
+      color: #fff;
+    }
+
+    .callout {
+      background: rgba(222, 155, 53, 0.08);
+      border-left: 3px solid var(--cs-gold);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 0.8rem 1rem;
+      font-size: 0.88rem;
+      color: #d9e1ec;
+    }
+    .callout strong {
+      color: var(--cs-gold-bright);
+    }
+
+    /* Timeline / Engine Evolution Cards */
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.85rem;
+    }
+    .era-card {
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+    .era-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--cs-gold);
+    }
+    .era-img-wrap {
+      position: relative;
+      height: 112px;
+      background: #10141a;
+      overflow: hidden;
+    }
+    .era-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .era-year {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(15, 18, 21, 0.88);
+      color: var(--cs-gold-bright);
+      padding: 0.15rem 0.48rem;
+      border-radius: 4px;
+      border: 1px solid rgba(222, 155, 53, 0.45);
+    }
+    .era-engine {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      background: rgba(75, 105, 255, 0.88);
+      color: #fff;
+      padding: 0.12rem 0.45rem;
+      border-radius: 4px;
+    }
+    .era-body {
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+    }
+    .era-title {
+      font-family: var(--font-display);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .era-text {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.48;
+    }
+
+    /* Comparison table */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .cs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      min-width: 520px;
+    }
+    .cs-table th {
+      background: var(--bg-surface-2);
+      color: var(--cs-gold-bright);
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.85rem;
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .cs-table td {
+      padding: 0.58rem 0.75rem;
+      border-bottom: 1px solid rgba(42, 50, 62, 0.6);
+      color: #cdd5e0;
+    }
+    .cs-table tr:last-child td {
+      border-bottom: none;
+    }
+    .cs-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Players Grid */
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.8rem;
+    }
+    .player-card {
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: all 0.18s ease;
+      cursor: pointer;
+      text-align: left;
+    }
+    .player-card:hover {
+      border-color: var(--cs-gold);
+      transform: translateY(-2px);
+      background: var(--bg-surface-3);
+    }
+    .player-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .player-nick {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .player-flag {
+      font-size: 0.74rem;
+      font-family: var(--font-mono);
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      padding: 0.08rem 0.35rem;
+      border-radius: 4px;
+      color: var(--text-secondary);
+    }
+    .player-name {
+      font-size: 0.77rem;
+      color: var(--text-muted);
+    }
+    .player-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .mini-stat {
+      font-family: var(--font-mono);
+      font-size: 0.69rem;
+      padding: 0.14rem 0.42rem;
+      border-radius: 4px;
+      background: rgba(15, 18, 21, 0.65);
+      border: 1px solid var(--border);
+      color: #d6dfec;
+    }
+    .mini-stat.gold {
+      border-color: rgba(222, 155, 53, 0.45);
+      color: var(--cs-gold-bright);
+    }
+    .player-summary {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .inspect-hint {
+      margin-top: auto;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--cs-gold);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Iconic Plays / Graffitis Grid */
+    .plays-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+      gap: 0.85rem;
+    }
+    .play-card {
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .play-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--cs-gold);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.45);
+    }
+    .play-visual {
+      height: 124px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem;
+      overflow: hidden;
+    }
+    .play-visual svg {
+      width: 100%;
+      height: 100%;
+      max-height: 98px;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
+    }
+    .play-map-pill {
+      position: absolute;
+      top: 0.55rem;
+      left: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: rgba(15, 18, 21, 0.84);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 0.15rem 0.48rem;
+      border-radius: 4px;
+      color: #fff;
+    }
+    .play-year-pill {
+      position: absolute;
+      top: 0.55rem;
+      right: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      background: rgba(222, 155, 53, 0.9);
+      color: #111;
+      font-weight: 700;
+      padding: 0.14rem 0.46rem;
+      border-radius: 4px;
+    }
+    .play-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      flex: 1;
+    }
+    .play-title {
+      font-family: var(--font-display);
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .play-event {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--cs-gold);
+    }
+    .play-desc {
+      font-size: 0.81rem;
+      color: var(--text-secondary);
+      line-height: 1.48;
+    }
+
+    /* Skins Section & Interactive Float Inspector */
+    .float-lab {
+      background: linear-gradient(145deg, #141921, #1c222d);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+    .float-lab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .float-lab-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--cs-gold-bright);
+    }
+    .float-readout {
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .float-badge {
+      padding: 0.16rem 0.55rem;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.76rem;
+      color: #111;
+    }
+    .float-bar-track {
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        #2dd4bf 0% 7%,
+        #60a5fa 7% 15%,
+        #facc15 15% 38%,
+        #fb923c 38% 45%,
+        #ef4444 45% 100%
+      );
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+    .float-slider {
+      width: 100%;
+      accent-color: var(--cs-gold);
+      cursor: pointer;
+    }
+    .float-scale {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    .float-preview-note {
+      margin-top: 0.65rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .wear-swatch {
+      height: 16px;
+      width: 120px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(90deg, #1d4ed8, #38bdf8, #93c5fd);
+      position: relative;
+      overflow: hidden;
+    }
+    .wear-overlay {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(35, 28, 22, 0.85) 0 4px,
+        transparent 4px 10px
+      );
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .skins-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 0.85rem;
+    }
+    .skin-card {
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-top-width: 3px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .skin-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+    }
+    .skin-stage {
+      height: 124px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 0.85rem;
+      overflow: hidden;
+    }
+    .skin-stage svg {
+      width: 100%;
+      height: 88px;
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.65));
+    }
+    .skin-rarity-tag {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.12rem 0.45rem;
+      border-radius: 4px;
+      color: #111;
+    }
+    .skin-price-tag {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: rgba(15, 18, 21, 0.85);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 0.12rem 0.48rem;
+      border-radius: 4px;
+    }
+    .skin-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+    }
+    .skin-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .skin-sub {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .skin-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    /* Maps Grid */
+    .maps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.85rem;
+    }
+    .map-card {
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .map-banner {
+      height: 108px;
+      padding: 0.75rem;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .map-radar-bg {
+      position: absolute;
+      right: 0.65rem;
+      top: 0.5rem;
+      width: 84px;
+      height: 84px;
+      opacity: 0.42;
+    }
+    .map-code {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--cs-gold-bright);
+      background: rgba(15, 18, 21, 0.8);
+      padding: 0.14rem 0.46rem;
+      border-radius: 4px;
+      border: 1px solid rgba(222, 155, 53, 0.35);
+      position: relative;
+      z-index: 1;
+    }
+    .map-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75);
+      position: relative;
+      z-index: 1;
+    }
+    .map-body {
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      flex: 1;
+    }
+    .map-meta {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .map-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.48;
+    }
+    .callouts-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.32rem;
+      margin-top: auto;
+      padding-top: 0.35rem;
+    }
+    .callout-pill {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      color: #c2cedf;
+      padding: 0.1rem 0.42rem;
+      border-radius: 4px;
+    }
+
+    /* ================= COMMENTS SECTION ================= */
+    .comments-section {
+      margin-top: 1.15rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .comments-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .comments-title {
+      font-family: var(--font-display);
+      font-size: 0.98rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .comments-count-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      color: var(--cs-gold-bright);
+      padding: 0.08rem 0.44rem;
+      border-radius: 999px;
+    }
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 0.9rem;
+    }
+    .comment-item {
+      background: rgba(15, 18, 21, 0.52);
+      border: 1px solid rgba(42, 50, 62, 0.75);
+      border-radius: var(--radius-sm);
+      padding: 0.68rem 0.85rem;
+      animation: fadeIn 0.22s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .comment-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+      flex-wrap: wrap;
+    }
+    .comment-author {
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .comment-rank {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.06rem 0.36rem;
+      border-radius: 3px;
+      background: rgba(75, 105, 255, 0.16);
+      color: #93a7ff;
+      border: 1px solid rgba(75, 105, 255, 0.3);
+    }
+    .comment-time {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+    .comment-text {
+      font-size: 0.84rem;
+      color: #cbd4e0;
+      line-height: 1.5;
+    }
+
+    .comment-form {
+      display: grid;
+      grid-template-columns: 165px minmax(0, 1fr) auto;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .comment-input {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.52rem 0.72rem;
+      font-size: 0.84rem;
+      color: var(--text-primary);
+      transition: border-color 0.18s;
+    }
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--cs-gold);
+    }
+    .comment-submit {
+      background: var(--cs-gold);
+      color: #111;
+      border: 1px solid var(--cs-gold-bright);
+      border-radius: var(--radius-sm);
+      padding: 0.52rem 0.95rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      transition: background 0.16s, transform 0.12s;
+    }
+    .comment-submit:hover {
+      background: var(--cs-gold-bright);
+    }
+    .comment-submit:active {
+      transform: scale(0.98);
+    }
+
+    /* ================= RIGHT SIDEBAR WIDGETS ================= */
+    .fact-box {
+      background: linear-gradient(155deg, rgba(222, 155, 53, 0.12), rgba(24, 28, 34, 0.4));
+      border: 1px solid rgba(222, 155, 53, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem;
+      font-size: 0.85rem;
+      color: #dce3ed;
+      line-height: 1.52;
+      margin-bottom: 0.7rem;
+    }
+    .fact-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--cs-gold-bright);
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+      display: block;
+    }
+    .fact-btn {
+      width: 100%;
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      padding: 0.45rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.16s;
+    }
+    .fact-btn:hover {
+      border-color: var(--cs-gold);
+      color: var(--cs-gold-bright);
+    }
+
+    /* Rarity Table Widget */
+    .rarity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.42rem;
+    }
+    .rarity-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      background: var(--bg-surface-2);
+      border-left: 4px solid var(--r-color);
+      border-radius: 0 5px 5px 0;
+      padding: 0.4rem 0.62rem;
+      font-size: 0.8rem;
+    }
+    .rarity-name {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .rarity-name strong {
+      color: #fff;
+      font-size: 0.81rem;
+    }
+    .rarity-name span {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .rarity-hex {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--r-color);
+      background: rgba(15, 18, 21, 0.75);
+      padding: 0.12rem 0.38rem;
+      border-radius: 4px;
+    }
+
+    /* Top 5 Players Widget */
+    .top5-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.48rem;
+    }
+    .top5-item {
+      width: 100%;
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.52rem 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-align: left;
+      transition: all 0.16s;
+    }
+    .top5-item:hover {
+      border-color: var(--cs-gold);
+      background: var(--bg-surface-3);
+    }
+    .top5-rank {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      background: var(--bg-main);
+      color: var(--cs-gold-bright);
+      border: 1px solid rgba(222, 155, 53, 0.4);
+      flex-shrink: 0;
+    }
+    .top5-info {
+      min-width: 0;
+      flex: 1;
+    }
+    .top5-nick {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .top5-sub {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .top5-badge {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--cs-gold);
+      flex-shrink: 0;
+    }
+
+    /* Empty search state */
+    .empty-state {
+      background: var(--bg-surface);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      display: none;
+    }
+    .empty-state.visible {
+      display: block;
+    }
+    .empty-state h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+    .empty-state p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .reset-btn {
+      background: var(--cs-gold);
+      color: #111;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    /* ================= MODAL VIEWER ================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(7, 9, 12, 0.82);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-backdrop.open {
+      display: flex;
+      animation: modalFade 0.18s ease;
+    }
+    @keyframes modalFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-dialog {
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-modal);
+      position: relative;
+    }
+    .modal-hero {
+      padding: 1.35rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .modal-close {
+      position: absolute;
+      top: 0.9rem;
+      right: 0.9rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(15, 18, 21, 0.8);
+      border: 1px solid var(--border-strong);
+      color: #fff;
+      font-size: 1.25rem;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+    }
+    .modal-close:hover {
+      border-color: var(--cs-gold);
+      color: var(--cs-gold-bright);
+    }
+    .modal-visual-box {
+      height: 155px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      overflow: hidden;
+    }
+    .modal-visual-box svg {
+      width: 100%;
+      height: 120px;
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.65));
+    }
+    .modal-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      color: var(--cs-gold-bright);
+      letter-spacing: 0.08em;
+    }
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.12;
+      color: #fff;
+      padding-right: 2.2rem;
+    }
+    .modal-body {
+      padding: 1.25rem 1.4rem 1.45rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+    }
+    .modal-quote {
+      background: rgba(222, 155, 53, 0.1);
+      border-left: 3px solid var(--cs-gold);
+      padding: 0.75rem 0.95rem;
+      border-radius: 0 6px 6px 0;
+      font-style: italic;
+      color: #f3d7a4;
+      font-size: 0.9rem;
+    }
+    .modal-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 0.6rem;
+    }
+    .modal-stat {
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.75rem;
+    }
+    .modal-stat span {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+    .modal-stat strong {
+      font-size: 0.88rem;
+      color: #fff;
+    }
+    .modal-desc {
+      font-size: 0.92rem;
+      color: #ced6e2;
+      line-height: 1.62;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 1480px;
+      margin: 1rem auto 0;
+      padding: 1.25rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .footer strong {
+      color: var(--cs-gold);
+      font-family: var(--font-display);
+      letter-spacing: 0.05em;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 1180px) {
+      .layout {
+        grid-template-columns: 225px minmax(0, 1fr);
+      }
+      .sidebar-right {
+        position: static;
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 880px) {
+      .nav-tabs {
+        order: 4;
+        width: 100%;
+        margin-left: 0;
+        padding-top: 0.25rem;
+      }
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 0.9rem;
+      }
+      .sidebar-left {
+        position: static;
+        display: none;
+      }
+      .sidebar-left.mobile-open {
+        display: flex;
+      }
+      .sidebar-right {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .thread-shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .vote-col {
+        flex-direction: row;
+        justify-content: flex-start;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 0.6rem 1rem;
+        gap: 0.6rem;
+      }
+      .thread-main {
+        padding: 0.95rem;
+      }
+      .comment-form {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .media-frame {
+        aspect-ratio: 16 / 9;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ================= NAVBAR FIJO ================= -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="#top" class="brand" id="brandReset">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="8.5" stroke="#111" stroke-width="2.2" />
+            <path d="M12 2V6.5M12 17.5V22M2 12H6.5M17.5 12H22" stroke="#111" stroke-width="2.2" stroke-linecap="round" />
+            <circle cx="12" cy="12" r="2.2" fill="#111" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">CS<span>//</span>ARCHIVE</span>
+          <span class="brand-sub">Wiki Táctica &amp; Foro · 1999–2026</span>
+        </div>
+      </a>
+
+      <div class="search-wrap" role="search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7.5" />
+          <path d="M20 20l-4.2-4.2" stroke-linecap="round" />
+        </svg>
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="Buscar hilos, jugadores (donk, s1mple), skins (#661), mapas..."
+          aria-label="Buscar en el foro y wiki de Counter-Strike"
+          autocomplete="off"
+        />
+        <button type="button" id="searchClear" class="search-clear" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">&times;</button>
+        <span class="search-kbd">/</span>
+      </div>
+
+      <button type="button" id="mobileMenuBtn" class="mobile-menu-btn" aria-expanded="false" aria-controls="leftSidebar">
+        <span>&#9776;</span> Índice Wiki
+      </button>
+
+      <nav class="nav-tabs" id="topNavTabs" aria-label="Categorías rápidas">
+        <button class="nav-tab active" data-cat="all">Todos</button>
+        <button class="nav-tab" data-cat="historia">Historia</button>
+        <button class="nav-tab" data-cat="motores">Motores</button>
+        <button class="nav-tab" data-cat="leyendas">Leyendas</button>
+        <button class="nav-tab" data-cat="jugadas">Jugadas</button>
+        <button class="nav-tab" data-cat="skins">Skins</button>
+        <button class="nav-tab" data-cat="mapas">Mapas</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= LAYOUT PRINCIPAL ================= -->
+  <div class="layout" id="top">
+    <!-- SIDEBAR IZQUIERDA: ÍNDICE WIKI -->
+    <aside class="sidebar-left" id="leftSidebar" aria-label="Índice Wiki">
+      <section class="panel">
+        <h2 class="panel-title">
+          <span>Índice Wiki</span>
+          <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-muted);">6 ÁREAS</span>
+        </h2>
+        <ul class="wiki-nav" id="wikiIndexList">
+          <li>
+            <button class="wiki-nav-btn active" data-cat="all">
+              <span class="wiki-nav-left"><span class="wiki-dot" style="background:var(--cs-gold)"></span>Todos los Hilos</span>
+              <span class="wiki-count" data-count="all">6</span>
+            </button>
+          </li>
+          <li>
+            <button class="wiki-nav-btn" data-cat="historia">
+              <span class="wiki-nav-left"><span class="wiki-dot" style="background:#f4b850"></span>Historia y Orígenes</span>
+              <span class="wiki-count" data-count="historia">1</span>
+            </button>
+          </li>
+          <li>
+            <button class="wiki-nav-btn" data-cat="motores">
+              <span class="wiki-nav-left"><span class="wiki-dot" style="background:#5e98d9"></span>Juegos y Motores</span>
+              <span class="wiki-count" data-count="motores">1</span>
+            </button>
+          </li>
+          <li>
+            <button class="wiki-nav-btn" data-cat="leyendas">
+              <span class="wiki-nav-left"><span class="wiki-dot" style="background:#4b69ff"></span>Pro Players</span>
+              <span class="wiki-count" data-count="leyendas">1</span>
+            </button>
+          </li>
+          <li>
+            <button class="wiki-nav-btn" data-cat="jugadas">
+              <span class="wiki-nav-left"><span class="wiki-dot" style="background:#eb4b4b"></span>Jugadas Míticas</span>
+              <span class="wiki-count" data-count="jugadas">1</span>
+            </button>
+          </li>
+          <li>
+            <button class="wiki-nav-btn" data-cat="skins">
+              <span class="wiki-nav-left"><span class="wiki-dot" style="background:#d32ce6"></span>Mercado de Skins</span>
+              <span class="wiki-count" data-count="skins">1</span>
+            </button>
+          </li>
+          <li>
+            <button class="wiki-nav-btn" data-cat="mapas">
+              <span class="wiki-nav-left"><span class="wiki-dot" style="background:#2dd4bf"></span>Mapas Clásicos</span>
+              <span class="wiki-count" data-count="mapas">1</span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><span>Saltar a Artículo</span></h2>
+        <div class="quick-links" id="quickJumpLinks"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><span>Estado del Servidor</span></h2>
+        <div class="server-status">
+          <div class="status-row">
+            <span>Comunidad Activa</span>
+            <span class="status-pill"><span class="pulse"></span>428 online</span>
+          </div>
+          <div class="status-row">
+            <span>Arquitectura</span>
+            <span style="font-family:var(--font-mono);color:#fff;">Source 2 · Sub-Tick</span>
+          </div>
+          <div class="status-row">
+            <span>Comentarios en Vivo</span>
+            <span id="sidebarCommentCount" style="font-family:var(--font-mono);color:var(--cs-gold-bright);">0</span>
+          </div>
+          <div class="status-row">
+            <span>Tus Upvotes</span>
+            <span id="sidebarUpvoteCount" style="font-family:var(--font-mono);color:var(--cs-gold-bright);">0</span>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- FEED CENTRAL: FORO / WIKI -->
+    <main class="feed" aria-label="Hilos principales de la Wiki y Foro">
+      <section class="hero-banner">
+        <div class="hero-top">
+          <div>
+            <div class="hero-badge">&#9670; Enciclopedia Competitiva &amp; Foro Comunidad</div>
+            <h1 class="hero-title">El Universo <span>Counter-Strike</span></h1>
+            <p class="hero-desc">
+              Del mod artesanal de <em>Half-Life</em> en 1999 a la era <strong>Source 2</strong>. Explora la historia verificada, los motores gráficos, el salón de la fama de HLTV, los graffitis inmortales de los Majors, la economía de skins y los mapas que definieron los esports.
+            </p>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><strong>27+</strong><span>Años de legado</span></div>
+          <div class="hero-stat"><strong>9</strong><span>Pro Players Legendarios</span></div>
+          <div class="hero-stat"><strong>5</strong><span>Jugadas &amp; Graffitis</span></div>
+          <div class="hero-stat"><strong>4</strong><span>Skins Míticas</span></div>
+          <div class="hero-stat"><strong>5</strong><span>Mapas Clásicos</span></div>
+        </div>
+      </section>
+
+      <div class="feed-toolbar">
+        <div class="feed-info" id="feedStatus">Mostrando <strong>6</strong> de 6 hilos fijados</div>
+        <div class="sort-controls" role="group" aria-label="Ordenar hilos">
+          <button type="button" class="sort-btn active" data-sort="featured">Orden Wiki</button>
+          <button type="button" class="sort-btn" data-sort="votes">Más votados</button>
+          <button type="button" class="sort-btn" data-sort="comments">Más comentados</button>
+        </div>
+      </div>
+
+      <div id="threadsContainer" class="feed"></div>
+
+      <div id="emptyState" class="empty-state">
+        <h3>Sin resultados en el radar</h3>
+        <p>No encontramos ningún hilo, jugador, skin o mapa que coincida con tu búsqueda actual.</p>
+        <button type="button" id="resetFiltersBtn" class="reset-btn">Restablecer filtros</button>
+      </div>
+    </main>
+
+    <!-- SIDEBAR DERECHA: WIDGETS -->
+    <aside class="sidebar-right" aria-label="Widgets tácticos">
+      <!-- Dato Curioso del Día -->
+      <section class="panel">
+        <h2 class="panel-title">
+          <span>Dato Curioso del Día</span>
+          <span id="factCounter" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);">1/8</span>
+        </h2>
+        <div class="fact-box" id="factBox">
+          <span class="fact-tag" id="factCategory">HISTORIA · MAPAS</span>
+          <p id="factText"></p>
+        </div>
+        <button type="button" id="nextFactBtn" class="fact-btn">Siguiente dato &#8594;</button>
+      </section>
+
+      <!-- Tabla Rápida de Rarezas de Skins -->
+      <section class="panel">
+        <h2 class="panel-title">
+          <span>Rarezas de Skins</span>
+          <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-muted);">HEX OFICIAL</span>
+        </h2>
+        <div class="rarity-list" id="rarityTable"></div>
+      </section>
+
+      <!-- Top 5 Jugadores Históricos -->
+      <section class="panel">
+        <h2 class="panel-title">
+          <span>Top 5 Históricos</span>
+          <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-muted);">GOAT LIST</span>
+        </h2>
+        <div class="top5-list" id="top5List"></div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- ================= MODAL AMPLIADO ================= -->
+  <div class="modal-backdrop" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-dialog">
+      <div class="modal-hero" id="modalHero">
+        <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Cerrar ventana">&times;</button>
+        <div class="modal-visual-box" id="modalVisual"></div>
+        <div class="modal-kicker" id="modalKicker"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta-grid" id="modalMeta"></div>
+        <blockquote class="modal-quote" id="modalQuote" style="display:none;"></blockquote>
+        <div class="modal-desc" id="modalDesc"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div><strong>CS//ARCHIVE</strong> · Foro y Wiki Táctica autocontenida creada para la comunidad hispanohablante de Counter-Strike.</div>
+    <div>Atajos: pulsa <code style="font-family:var(--font-mono);color:var(--cs-gold-bright);">/</code> para buscar · <code style="font-family:var(--font-mono);color:var(--cs-gold-bright);">ESC</code> para cerrar visores.</div>
+  </footer>
+
+  <script>
+    /* =====================================================================
+       UTILIDAD DE RESPALDO DE IMÁGENES (FALLBACK SVG TÁCTICO INFALIBLE)
+    ===================================================================== */
+    function buildFallbackSvgDataUri(title, subtitle, accentColor) {
+      const safeTitle = String(title || 'COUNTER-STRIKE').replace(/[<>&"]/g, '');
+      const safeSub = String(subtitle || 'ARCHIVO TÁCTICO').replace(/[<>&"]/g, '');
+      const accent = accentColor || '#de9b35';
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#11161d"/>
+              <stop offset="60%" stop-color="#1b222c"/>
+              <stop offset="100%" stop-color="#271e15"/>
+            </linearGradient>
+            <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+              <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="800" height="340" fill="url(#bg)"/>
+          <rect width="800" height="340" fill="url(#grid)"/>
+          <circle cx="670" cy="170" r="115" fill="none" stroke="${accent}" stroke-opacity="0.22" stroke-width="2"/>
+          <circle cx="670" cy="170" r="70" fill="none" stroke="${accent}" stroke-opacity="0.32" stroke-width="1.5" stroke-dasharray="6 6"/>
+          <line x1="670" y1="35" x2="670" y2="305" stroke="${accent}" stroke-opacity="0.25" stroke-width="1.5"/>
+          <line x1="535" y1="170" x2="800" y2="170" stroke="${accent}" stroke-opacity="0.25" stroke-width="1.5"/>
+          <rect x="44" y="102" width="6" height="128" fill="${accent}"/>
+          <text x="68" y="148" fill="${accent}" font-family="monospace" font-size="18" font-weight="700" letter-spacing="3">${safeSub}</text>
+          <text x="68" y="206" fill="#eef2f6" font-family="sans-serif" font-size="44" font-weight="800" letter-spacing="2">${safeTitle}</text>
+        </svg>
+      `;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    window.handleImgFallback = function (imgEl) {
+      if (imgEl.dataset.fallbackApplied) return;
+      imgEl.dataset.fallbackApplied = '1';
+      imgEl.src = buildFallbackSvgDataUri(
+        imgEl.dataset.fbTitle || 'COUNTER-STRIKE',
+        imgEl.dataset.fbSub || 'CS//ARCHIVE VISUAL',
+        imgEl.dataset.fbAccent || '#de9b35'
+      );
+    };
+
+    /* =====================================================================
+       BASE DE DATOS VERIFICADA DE CONTENIDO COUNTER-STRIKE
+    ===================================================================== */
+    const RARITIES = [
+      { es: 'Grado de Consumidor', en: 'Consumer Grade', hex: '#b0c3d9' },
+      { es: 'Grado Industrial', en: 'Industrial Grade', hex: '#5e98d9' },
+      { es: 'Grado Militar', en: 'Mil-Spec Grade', hex: '#4b69ff' },
+      { es: 'Restringido', en: 'Restricted', hex: '#8847ff' },
+      { es: 'Clasificado', en: 'Classified', hex: '#d32ce6' },
+      { es: 'Encubierto', en: 'Covert', hex: '#eb4b4b' },
+      { es: 'Contrabando (Única)', en: 'Contraband', hex: '#e4ae39' },
+      { es: 'Extraordinario (Cuchillos/Guantes)', en: 'Exceedingly Rare', hex: '#ffd700' }
+    ];
+
+    const FUN_FACTS = [
+      {
+        cat: 'MAPAS · HISTORIA',
+        text: 'Mirage nació en 2004 como "de_cpl_strike", creado por Michael "BubkeZ" Hüll para la liga CPL. Por eso muchos veteranos siguen llamando "CPL" o "Jungle/Connector" a zonas del mapa.'
+      },
+      {
+        cat: 'SKINS · CONTRABAND',
+        text: 'La M4A4 | Howl es la única arma de rareza Contraband (#e4ae39) en toda la historia de Counter-Strike. Valve la retiró de cajas en junio de 2014 tras una disputa DMCA por derechos de autor del lobo original.'
+      },
+      {
+        cat: 'ESPORTS · RÉCORD',
+        text: 'Entre 2012 y 2013, Ninjas in Pyjamas (con f0rest y GeT_RiGhT) encadenó un récord imbatido de 87 victorias consecutivas en mapas presenciales (LAN) en los inicios de CS:GO.'
+      },
+      {
+        cat: 'ORÍGENES · 1999',
+        text: 'La Beta 1.0 de Counter-Strike se lanzó el 19 de junio de 1999 por Minh Le ("Gooseman") y Jess Cliffe. Ni siquiera existía el modo de desactivación de bomba (de_): al principio solo había rescate de rehenes (cs_).'
+      },
+      {
+        cat: 'CS2 · FENÓMENO DONK',
+        text: 'Con solo 17 años, Danil "donk" Kryshkovets ganó el Perfect World Shanghai Major 2024 con Team Spirit logrando un rating HLTV récord de 1.49 en un Major MVP, superando la marca de s1mple en Estocolmo 2021.'
+      },
+      {
+        cat: 'MAPAS · INFERNO',
+        text: 'El pasillo "Banana" de Inferno debe su nombre a su forma curva y a los muros amarillos que tenía en las versiones clásicas de CS 1.6 y Condition Zero.'
+      },
+      {
+        cat: 'ECONOMÍA · BLUE GEM',
+        text: 'El patrón #661 ("Scar Pattern") de la AK-47 | Case Hardened en versión StatTrak Factory New ha superado valoraciones de 1 millón de dólares entre coleccionistas por su cubierta casi total en azul metálico.'
+      },
+      {
+        cat: 'GRAFFITIS · OVERPASS',
+        text: 'Tras el infame "Olofboost" en DreamHack Winter 2014, Valve parcheó el pixel-walk en Overpass y colocó una señal en alemán que reza "Bitte nicht klettern" (Por favor, no trepar) como guiño eterno.'
+      }
+    ];
+
+    const PLAYERS = [
+      {
+        id: 'zywoo',
+        nick: 'ZywOo',
+        fullName: 'Mathieu Herbaut',
+        country: 'FR',
+        role: 'AWPer / Hybrid',
+        teams: 'Team Vitality',
+        majors: '3x Major (París 2023, Austin 2025, Budapest 2025)',
+        hltv: '4x HLTV #1 (2019, 2020, 2023, 2025)',
+        era: '2018 – Presente',
+        accent: '#f4b850',
+        summary: 'El talento más completo y consistente de la era moderna. Domina rifle, pistola y AWP con una lectura de juego casi sobrehumana.',
+        details: 'Nacido el mismo día que salió Counter-Strike 1.0 (9 de noviembre de 2000), Mathieu "ZywOo" Herbaut irrumpió en 2019 siendo #1 del mundo en su año debut. Tras conquistar el BLAST.tv Paris Major 2023 en casa y liderar la dinastía de Team Vitality en 2025, acumula la mayor cantidad de premios MVP de la historia y cuatro coronas HLTV #1.'
+      },
+      {
+        id: 's1mple',
+        nick: 's1mple',
+        fullName: 'Oleksandr Kostyliev',
+        country: 'UA',
+        role: 'AWPer / Star',
+        teams: 'Natus Vincere, Team Liquid',
+        majors: '1x Major (PGL Stockholm 2021 sin perder un mapa)',
+        hltv: '3x HLTV #1 (2018, 2021, 2022)',
+        era: '2016 – 2023 (CS:GO GOAT)',
+        accent: '#ffd700',
+        summary: 'El techo mecánico más alto de CS:GO. Dueño de 8 MVPs en un solo año (2021) y de uno de los graffitis más icónicos del juego.',
+        details: 'Reconocido oficialmente por ESL y gran parte de la comunidad como el GOAT absoluto de CS:GO. Su agresividad imposible con el AWP, su precisión en clutches 1vX y su campaña histórica de 2021 (Intel Grand Slam + PGL Major Stockholm invicto en mapas) redefinieron lo que un jugador individual puede cargar en un servidor Tier-1.'
+      },
+      {
+        id: 'dev1ce',
+        nick: 'dev1ce',
+        fullName: 'Nicolai Reedtz',
+        country: 'DK',
+        role: 'AWPer Táctico',
+        teams: 'Astralis, Ninjas in Pyjamas',
+        majors: '4x Major (Atlanta 17, London 18, Katowice 19, Berlin 19)',
+        hltv: 'Top 5 HLTV en 6 años consecutivos',
+        era: '2014 – Presente',
+        accent: '#eb4b4b',
+        summary: 'La columna vertebral de la era Astralis. El AWPer más inteligente, disciplinado y letal en rondas de presión.',
+        details: 'Mientras otros apostaban por flicks arriesgados, dev1ce perfeccionó el posicionamiento, la gestión de utilidad y la repetición quirúrgica. Con 4 títulos Major (incluidos 3 consecutivos con Astralis) y 2 Major MVPs, es el símbolo de la excelencia táctica danesa.'
+      },
+      {
+        id: 'donk',
+        nick: 'donk',
+        fullName: 'Danil Kryshkovets',
+        country: 'RU',
+        role: 'Entry Fragger / Rifler',
+        teams: 'Team Spirit',
+        majors: '1x Major (Perfect World Shanghai 2024 · MVP 1.49)',
+        hltv: 'HLTV #1 (2024) · #2 (2025)',
+        era: '2024 – Presente (Era CS2)',
+        accent: '#4b69ff',
+        summary: 'El prodigio que rompió CS2. El entry fragger más dominante jamás visto, campeón y MVP de Major a los 17 años.',
+        details: 'Su debut en IEM Katowice 2024 (1.70 de rating) paralizó la escena internacional. En diciembre de 2024 levantó el Shanghai Major con Team Spirit rompiendo el récord histórico de rating en un Major (1.49). En CS2, donk demostró que el rifle puro y el peek agresivo sub-tick pueden eclipsar incluso a los AWPers.'
+      },
+      {
+        id: 'f0rest',
+        nick: 'f0rest',
+        fullName: 'Patrik Lindberg',
+        country: 'SE',
+        role: 'Rifler / Hybrid',
+        teams: 'Fnatic (1.6), Ninjas in Pyjamas',
+        majors: '1x Major (ESL One Cologne 2014) + Múltiples títulos 1.6',
+        hltv: 'Top 10 HLTV en 1.6 y CS:GO (Longevidad récord)',
+        era: '2006 – 2020',
+        accent: '#5e98d9',
+        summary: 'Sinónimo de elegancia mecánica y longevidad. Leyenda absoluta tanto en Counter-Strike 1.6 como en la época dorada de NiP.',
+        details: 'Pocos jugadores lograron dominar dos eras completamente distintas. En 1.6 lideró la máquina de ganar torneos de Fnatic (2006–2010), y en CS:GO fue pieza clave del 87-0 de NiP junto a GeT_RiGhT. Famoso por su control de pistolas, headshots limpios y calma imperturbable en LAN.'
+      },
+      {
+        id: 'get_right',
+        nick: 'GeT_RiGhT',
+        fullName: 'Christopher Alesund',
+        country: 'SE',
+        role: 'Lurker / Rifler',
+        teams: 'Fnatic (1.6), Ninjas in Pyjamas',
+        majors: '1x Major (ESL One Cologne 2014)',
+        hltv: '2x HLTV #1 (2013, 2014)',
+        era: '2009 – 2020',
+        accent: '#8847ff',
+        summary: 'El inventor moderno del rol "lurker" y del control de spray avanzado. Primer bicampeón consecutivo del HLTV #1 en CS:GO.',
+        details: 'GeT_RiGhT transformó la táctica en Counter-Strike al demostrar cómo un jugador solitario podía desarmar las rotaciones enemigas desde los flancos. Su pasión, sus lágrimas tras ganar Cologne 2014 y su lectura de timings lo convirtieron en uno de los ídolos más queridos de la comunidad.'
+      },
+      {
+        id: 'fallen',
+        nick: 'FalleN',
+        fullName: 'Gabriel Toledo',
+        country: 'BR',
+        role: 'IGL / AWPer',
+        teams: 'Luminosity, SK Gaming, FURIA',
+        majors: '2x Major (Columbus 2016, Cologne 2016)',
+        hltv: 'HLTV #2 (2016) · #6 (2017)',
+        era: '2015 – Presente',
+        accent: '#2dd4bf',
+        summary: '"El Profesor", padrino del Counter-Strike brasileño. Combinó liderazgo táctico de élite con un AWP explosivo y creativo.',
+        details: 'FalleN no solo llevó a Sudamérica a la cima mundial con dos Majors consecutivos en 2016 (Luminosity / SK Gaming); construyó toda la infraestructura competitiva de Brasil. Su estilo agresivo con el AWP mientras dirigía rondas (IGL) es referencia obligada para cualquier capitán.'
+      },
+      {
+        id: 'coldzera',
+        nick: 'coldzera',
+        fullName: 'Marcelo David',
+        country: 'BR',
+        role: 'Rifler / Anchor / Star',
+        teams: 'Luminosity, SK Gaming, FaZe',
+        majors: '2x Major + 2x Major MVP (Columbus & Cologne 2016)',
+        hltv: '2x HLTV #1 (2016, 2017)',
+        era: '2015 – 2019 (Peak)',
+        accent: '#e4ae39',
+        summary: 'El rey de la consistencia en 2016–2017. Autor del jumping double AWP en Mirage y bicampeón consecutivo de Major MVP.',
+        details: 'Durante dos años enteros, coldzera fue prácticamente insuperable en situaciones de clutch y defensa de sites. Su frialdad absoluta para cerrar rondas críticas y su posicionamiento milimétrico sostuvieron la dinastía brasileña de SK Gaming.'
+      },
+      {
+        id: 'niko',
+        nick: 'NiKo',
+        fullName: 'Nikola Kovač',
+        country: 'BA',
+        role: 'Star Rifler / Entry',
+        teams: 'mousesports, FaZe Clan, G2 Esports, Falcons',
+        majors: '0x Major (Finalista en Boston 2018 y Estocolmo 2021)',
+        hltv: '9 años seguidos en el Top 11 HLTV (#2 en 2017 y 2023)',
+        era: '2016 – Presente',
+        accent: '#d32ce6',
+        summary: 'Considerado el mejor rifler puro de la era CS:GO y el rey indiscutible de la Desert Eagle. Su búsqueda del Major es la gran épica del circuito.',
+        details: 'La precisión de su crosshair placement y su capacidad para borrar rivales de un solo tiro (one-tap) con AK-47 o Deagle son estudiadas por profesionales de todo el mundo. Ganador de IEM Katowice y Cologne, su único pendiente histórico sigue siendo levantar un trofeo Major.'
+      }
+    ];
+
+    const ICONIC_PLAYS = [
+      {
+        id: 'coldzera-mirage',
+        title: 'Jumping Double AWP de coldzera',
+        player: 'Marcelo "coldzera" David',
+        team: 'Luminosity Gaming vs. Team Liquid',
+        map: 'de_mirage (Site B · Van)',
+        event: 'MLG Major Columbus 2016 (Semifinal)',
+        year: '2016',
+        graffiti: 'AWP alado con 4 calaveras rojas pintado en el muro de Van en B-Apartments.',
+        quote: '"The first face is adreN... OH! A JUMPING DOUBLE FROM COLD! WHAT IS GOING ON RIGHT NOW?! HOW DOES HE DO THIS?!" — Matt "Sadokist" Trivett',
+        gradient: 'linear-gradient(135deg, #2a1d12 0%, #5b3818 55%, #161b22 100%)',
+        accent: '#f4b850',
+        summary: 'Con Liquid a punto de ganar el mapa (15-9), coldzera frena el rush en B saltando desde Van y conecta un doble no-scope en el aire antes de rematar el 4K.',
+        details: 'Luminosity Gaming estaba contra las cuerdas perdiendo 9-15 en Mirage, a una sola ronda de quedar eliminados del Major. Team Liquid ejecutó un ataque rápido a B por Apartamentos. Coldzera eliminó al primero con mira, saltó para obtener información sobre la furgoneta (Van) y disparó un no-scope aéreo que atravesó a dos rivales de una sola bala (colateral), cerrando luego una cuarta baja. Luminosity empató 15-15, ganó en prórroga y terminó conquistando el primer Major de Sudamérica.',
+        svg: `<svg viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M52 72 L135 55 L195 55 L268 48 L272 56 L205 64 L180 78 L152 78 L142 68 L98 76 L62 86 Z" fill="#1b232e" stroke="#f4b850" stroke-width="2.5"/>
+          <path d="M126 42 C100 18, 66 20, 48 44 C72 40, 96 46, 118 54 Z" fill="#f4b850" fill-opacity="0.85"/>
+          <path d="M188 42 C214 18, 248 20, 266 44 C242 40, 218 46, 196 54 Z" fill="#f4b850" fill-opacity="0.85"/>
+          <g fill="#eb4b4b">
+            <circle cx="115" cy="96" r="8"/><circle cx="145" cy="96" r="8"/><circle cx="175" cy="96" r="8"/><circle cx="205" cy="96" r="8"/>
+          </g>
+          <text x="160" y="20" text-anchor="middle" fill="#f4b850" font-family="monospace" font-size="11" font-weight="700">15-9 COMEBACK · B APTS</text>
+        </svg>`
+      },
+      {
+        id: 's1mple-cache',
+        title: 'Falling Double AWP de s1mple en Cache',
+        player: 'Oleksandr "s1mple" Kostyliev',
+        team: 'Team Liquid vs. Fnatic',
+        map: 'de_cache (Site B · Heaven)',
+        event: 'ESL One Cologne 2016 (Semifinal)',
+        year: '2016',
+        graffiti: 'Ángel / silueta en caída sosteniendo un AWP sin mira bajo el balcón de Heaven en Bombsite B.',
+        quote: '"s1mple falling! HE GETS ONE! AND HE GETS ANOTHER ONE! YOU CAN\'T DO THAT, S1MPLE! THIS IS NOT FPL, THIS IS A MAJOR!" — James Bardolph',
+        gradient: 'linear-gradient(135deg, #102033 0%, #1c3d5e 55%, #12171e 100%)',
+        accent: '#5e98d9',
+        summary: 'Una de las jugadas más audaces de la historia: s1mple se lanza al vacío desde Heaven en Cache y encadena dos no-scopes imposibles de AWP contra Fnatic.',
+        details: 'Durante las semifinales de ESL One Cologne 2016 (antes de fichar por NaVi), s1mple jugaba para Team Liquid y defendía Bombsite B en Cache en una situación extrema contra el roster legendario de Fnatic (1v2 clutch decisivo tras despejar el round). En lugar de jugar seguro desde Heaven, saltó al vacío para sorprender a dennis con un no-scope en pleno aire y, al tocar el suelo, giró al instante para eliminar a KRIMZ con otro no-scope a larga distancia sin apuntar. Aunque en la memoria colectiva muchos lo recuerdan junto a sus icónicos clutches 1v4, este 1v2 aéreo le valió uno de los graffitis más queridos de CS:GO.',
+        svg: `<svg viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="160" cy="24" rx="22" ry="6" stroke="#ffd700" stroke-width="2.5"/>
+          <path d="M122 36 L198 36 L184 58 L136 58 Z" fill="#5e98d9" fill-opacity="0.35" stroke="#5e98d9" stroke-width="2"/>
+          <path d="M90 68 L230 82 L226 90 L86 76 Z" fill="#eef2f6" stroke="#4b69ff" stroke-width="2"/>
+          <path d="M160 32 L160 105" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <circle cx="244" cy="86" r="10" stroke="#eb4b4b" stroke-width="2"/>
+          <path d="M238 80 L250 92 M250 80 L238 92" stroke="#eb4b4b" stroke-width="2"/>
+          <text x="160" y="112" text-anchor="middle" fill="#8ec1f7" font-family="monospace" font-size="11" font-weight="700">NO-SCOPE ×2 · HEAVEN DROP</text>
+        </svg>`
+      },
+      {
+        id: 'olof-boost',
+        title: 'El Infame "Olofboost" en Overpass',
+        player: 'Olof "olofmeister" Kajbjer & Fnatic',
+        team: 'Fnatic vs. Team LDLC',
+        map: 'de_overpass (CT Spawn)',
+        event: 'DreamHack Winter 2014 (Cuartos de Final)',
+        year: '2014',
+        graffiti: 'Señal de advertencia "Bitte nicht klettern" (No trepar) añadida por Valve tras corregir el mapa.',
+        quote: '"They have found a triple boost in CT spawn that sees literally the entire map!" — Transmisión DreamHack 2014',
+        gradient: 'linear-gradient(135deg, #272210 0%, #4b3e12 52%, #151920 100%)',
+        accent: '#e4ae39',
+        summary: 'Fnatic guardó en secreto un boost de tres jugadores sobre un píxel invisible en CT Spawn que les permitió remontar un 3-13 en cuartos de un Major.',
+        details: 'Perdiendo 3-13 en el mapa decisivo ante los franceses de LDLC, Fnatic sacó su arma secreta: un triple boost cerca de CT Spawn donde olofmeister quedaba parado sobre un borde invisible (pixel-walk) con visión directa hacia Site B, Agua, Medio y Long con un SCAR-20 automático. Fnatic remontó 16-13, pero la polémica estalló al instante por explotar texturas transparentes. Los administradores ordenaron repetir el mapa y Fnatic decidió retirarse voluntariamente del torneo.',
+        svg: `<svg viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="64" y="84" width="192" height="16" rx="3" fill="#2a323e"/>
+          <rect x="142" y="64" width="36" height="20" rx="3" fill="#4b69ff" fill-opacity="0.6" stroke="#4b69ff"/>
+          <rect x="142" y="42" width="36" height="20" rx="3" fill="#4b69ff" fill-opacity="0.8" stroke="#8da2ff"/>
+          <rect x="142" y="20" width="36" height="20" rx="3" fill="#e4ae39" stroke="#fff"/>
+          <path d="M178 28 L280 58 M178 30 L280 24 M178 32 L280 86" stroke="#eb4b4b" stroke-width="1.8" stroke-dasharray="5 3"/>
+          <text x="160" y="113" text-anchor="middle" fill="#e4ae39" font-family="monospace" font-size="11" font-weight="700">PIXEL-WALK · 3-13 → 16-13</text>
+        </svg>`
+      },
+      {
+        id: 'olof-defuse',
+        title: 'Burning Defuse de olofmeister',
+        player: 'Olof "olofmeister" Kajbjer',
+        team: 'Fnatic vs. Team Dignitas',
+        map: 'de_overpass (Bombsite B)',
+        event: 'ESL One Cologne 2014 (Semifinal)',
+        year: '2014',
+        graffiti: 'Silueta de un CT desactivando la bomba envuelto en llamas en la pared de Site B de Overpass.',
+        quote: '"He\'s sticking the defuse in the fire! HE GETS IT! HE BURNS TO DEATH AFTER DEFUSING!" — ESL One Cologne 2014',
+        gradient: 'linear-gradient(135deg, #2d1212 0%, #6d2316 55%, #16181f 100%)',
+        accent: '#eb4b4b',
+        summary: 'Con el marcador 14-14, olofmeister aguanta un Molotov completo sobre la C4 y logra desactivarla décimas de segundo antes de morir calcinado.',
+        details: 'En uno de los momentos de mayor sangre fría en la historia de los Majors, el marcador estaba empatado 14-14 en Overpass. Dignitas lanzó un Molotov preciso sobre la bomba para impedir la desactivación. Sabiendo que si soltaba la E perderían la ronda clave, olofmeister se quedó inmóvil entre el fuego, completó el defuse con un puñado de HP y murió quemado una fracción de segundo después de asegurar el 15-14 para Fnatic.',
+        svg: `<svg viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M160 14 C184 42, 206 58, 196 86 C188 100, 132 100, 124 86 C114 58, 136 42, 160 14 Z" fill="#eb4b4b" fill-opacity="0.78"/>
+          <path d="M160 34 C174 52, 184 64, 178 84 C172 93, 148 93, 142 84 C136 64, 146 52, 160 34 Z" fill="#f4b850"/>
+          <rect x="138" y="76" width="44" height="20" rx="3" fill="#181c22" stroke="#eef2f6" stroke-width="2"/>
+          <circle cx="160" cy="86" r="4" fill="#2dd4bf"/>
+          <text x="160" y="113" text-anchor="middle" fill="#ff9090" font-family="monospace" font-size="11" font-weight="700">14-14 · DEFUSE EN MOLOTOV</text>
+        </svg>`
+      },
+      {
+        id: 'happy-inferno',
+        title: 'Deagle Ace de Happy en Inferno (y el arte del Ninja Defuse)',
+        player: 'Vincent "Happy" Schopenhauer',
+        team: 'Team EnVyUs vs. Team SoloMid',
+        map: 'de_inferno (Banana · Site B)',
+        event: 'DreamHack Open London 2015',
+        year: '2015',
+        graffiti: 'Sin graffiti oficial (no fue Major), pero coronado como el mejor clip de Desert Eagle de todos los tiempos.',
+        quote: '"Happy with one deag! OH AND ANOTHER ONE! OH AND A THIRD! DUPREEH IS LIKE SWEATING BULLETS! HAPPY GETS THE ACE!" — Auguste "Semmler" Massonnat',
+        gradient: 'linear-gradient(135deg, #21152b 0%, #44205c 55%, #151921 100%)',
+        accent: '#d32ce6',
+        summary: 'Cinco bajas con Desert Eagle en Banana (dos a través del humo y un 4K relámpago antes de cerrar el Ace) que definieron el highlight perfecto de pistola.',
+        details: 'En una ronda de compra forzada contra TSM (el núcleo que luego sería Astralis), Happy jugó un ángulo retrasado en Banana de Inferno. A través de un humo denso, acertó dos pre-fires letales a la cabeza con la Desert Eagle, remató al tercero y cuarto al asomarse por la esquina y cerró el Ace contra dupreeh. Mención honorífica en la cultura de jugadas míticas para los legendarios Ninja Defuses en humo (como el mítico 1v5 de Xyp9x o los defuses silenciosos de SpawN en 1.6), que demuestran que el ingenio vale tanto como la puntería.',
+        svg: `<svg viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M92 42 H214 V58 H172 L162 84 H134 L144 58 H92 Z" fill="#cfd8e3" stroke="#d32ce6" stroke-width="2.2"/>
+          <path d="M214 48 L272 34 M214 50 L276 50 M214 52 L272 66" stroke="#f4b850" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="242" cy="50" r="24" fill="#d32ce6" fill-opacity="0.16" stroke="#d32ce6" stroke-dasharray="4 4"/>
+          <text x="160" y="110" text-anchor="middle" fill="#ed82f7" font-family="monospace" font-size="11" font-weight="700">JUAN DEAG ×5 · BANANA SMOKE</text>
+        </svg>`
+      }
+    ];
+
+    const SKINS = [
+      {
+        id: 'dragon-lore',
+        name: 'AWP | Dragon Lore',
+        rarity: 'Encubierto (Covert)',
+        rarityHex: '#eb4b4b',
+        collection: 'Colección Cobblestone (Op. Breakout · 2014)',
+        floatRange: '0.00 – 0.70 (FN a BS)',
+        price: '$4,500 – $400,000+ (Souvenir FN)',
+        bg: 'linear-gradient(135deg, #2d1e0f 0%, #4d2c12 52%, #191d24 100%)',
+        summary: 'El santo grial del AWP. Solo obtenible por drops históricos de Cobblestone o contratos de intercambio de altísimo riesgo.',
+        details: 'Introducida el 1 de julio de 2014 junto a Operation Breakout, la AWP Dragon Lore se volvió el símbolo definitivo de estatus en Counter-Strike. Al retirarse Cobblestone del pool activo de Majors, las versiones Souvenir Factory New (con firmas doradas de jugadores como s1mple o kennyS) se convirtieron en reliquias multimillonarias.',
+        svg: `<svg viewBox="0 0 320 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M28 56 L108 46 L218 46 L296 42 L296 48 L224 53 L194 64 L164 64 L152 56 L108 62 L62 72 L30 70 Z" fill="#d49b38" stroke="#ffdf8e" stroke-width="2"/>
+          <path d="M118 46 C135 34, 168 36, 188 46" stroke="#eb4b4b" stroke-width="3.5" stroke-linecap="round"/>
+          <rect x="136" y="28" width="52" height="10" rx="3" fill="#2a323e" stroke="#de9b35"/>
+          <path d="M78 55 Q116 48 148 56" stroke="#eb4b4b" stroke-width="2.5"/>
+        </svg>`
+      },
+      {
+        id: 'ak-661',
+        name: 'AK-47 | Case Hardened #661',
+        rarity: 'Clasificado (Classified)',
+        rarityHex: '#d32ce6',
+        collection: 'CS:GO Weapon Case (Arms Deal · 2013)',
+        floatRange: '0.00 – 1.00 (Paint Seed #661)',
+        price: '$35,000 – $1,000,000+ (ST FN)',
+        bg: 'linear-gradient(135deg, #0d2142 0%, #174ea6 54%, #181c22 100%)',
+        summary: 'El legendario "Scar Pattern Blue Gem". De 1,000 patrones posibles de textura, el #661 cubre el rifle casi por completo en azul acero.',
+        details: 'Las skins Case Hardened usan un índice de semilla (Paint Seed 1–1000) que proyecta distintas porciones de una textura templada. El patrón #661 es el Tier-1 indiscutible de los Blue Gems. En 2024, la venta histórica de una StatTrak Factory New #661 rompió todos los récords del mercado digital al superar el millón de dólares.',
+        svg: `<svg viewBox="0 0 320 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bluegem" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#8b5a2b"/>
+              <stop offset="28%" stop-color="#1d7afc"/>
+              <stop offset="72%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#93c5fd"/>
+            </linearGradient>
+          </defs>
+          <path d="M36 52 L106 42 L212 42 L286 46 L286 52 L222 52 L198 58 L184 78 L166 76 L174 56 L128 56 L114 72 L98 70 L104 56 L42 66 Z" fill="url(#bluegem)" stroke="#bae6fd" stroke-width="2"/>
+          <text x="160" y="24" text-anchor="middle" fill="#7dd3fc" font-family="monospace" font-size="11" font-weight="700">PAINT SEED #661 · BLUE GEM</text>
+        </svg>`
+      },
+      {
+        id: 'karambit-fade',
+        name: 'Karambit | Fade (True 90/10)',
+        rarity: 'Extraordinario (Cuchillo)',
+        rarityHex: '#ffd700',
+        collection: 'Actualización Arms Deal (2013)',
+        floatRange: '0.00 – 0.08 (Solo FN y MW)',
+        price: '$2,400 – $8,500+ (100% Fade)',
+        bg: 'linear-gradient(135deg, #27123a 0%, #6d1f59 52%, #4a3512 100%)',
+        summary: 'El cuchillo más icónico de la primera generación. Su hoja curva muestra un degradado anodizado de púrpura, rosa y oro.',
+        details: 'Con un tope de float de 0.08, el Karambit Fade solo existe en Factory New y Minimal Wear. Los coleccionistas clasifican su valor según el porcentaje de Fade (hasta 100% "Full Fade" o el clásico "True 90/10", 90% rosa y 10% amarillo con una esquina impecable en la hoja).',
+        svg: `<svg viewBox="0 0 320 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="fadeBlade" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#7c3aed"/>
+              <stop offset="55%" stop-color="#ec4899"/>
+              <stop offset="100%" stop-color="#facc15"/>
+            </linearGradient>
+          </defs>
+          <circle cx="96" cy="58" r="14" stroke="#94a3b8" stroke-width="5"/>
+          <path d="M110 56 C135 50, 152 44, 168 38 C206 24, 248 28, 266 56 C238 48, 206 54, 174 66 C150 72, 128 68, 110 62 Z" fill="url(#fadeBlade)" stroke="#fde68a" stroke-width="2"/>
+          <text x="160" y="18" text-anchor="middle" fill="#f9a8d4" font-family="monospace" font-size="11" font-weight="700">100% FULL FADE · CAP 0.08</text>
+        </svg>`
+      },
+      {
+        id: 'm4a4-howl',
+        name: 'M4A4 | Howl',
+        rarity: 'Contrabando (Contraband)',
+        rarityHex: '#e4ae39',
+        collection: 'Huntsman Case (Retirada Jun. 2014)',
+        floatRange: '0.00 – 0.40 (No existe en BS)',
+        price: '$3,800 – $22,000+ (ST FN)',
+        bg: 'linear-gradient(135deg, #2d0f0f 0%, #6b1d12 50%, #3d2a0d 100%)',
+        summary: 'La única skin Contraband en toda la historia del juego. Nunca volverá a salir en ninguna caja, garantizando escasez absoluta.',
+        details: 'Lanzada el 1 de mayo de 2014 como Covert comunitaria, Valve descubrió semanas después que el diseño original del lobo infringía derechos de autor. En junio de 2014 rediseñó la ilustración internamente, eliminó el ítem de la Huntsman Case y creó la categoría exclusiva "Contraband" (#e4ae39) para las copias ya existentes.',
+        svg: `<svg viewBox="0 0 320 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="howlFire" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#181c22"/>
+              <stop offset="45%" stop-color="#dc2626"/>
+              <stop offset="80%" stop-color="#f97316"/>
+              <stop offset="100%" stop-color="#facc15"/>
+            </linearGradient>
+          </defs>
+          <path d="M36 52 H96 L112 40 H206 L220 46 H284 V54 H216 L196 60 H164 L158 76 H142 L146 60 H112 L94 68 H36 Z" fill="url(#howlFire)" stroke="#e4ae39" stroke-width="2"/>
+          <text x="160" y="22" text-anchor="middle" fill="#e4ae39" font-family="monospace" font-size="11" font-weight="700">ÚNICA SKIN CONTRABAND · DMCA 2014</text>
+        </svg>`
+      }
+    ];
+
+    const CLASSIC_MAPS = [
+      {
+        code: 'de_dust2',
+        name: 'Dust II',
+        creator: 'David Johnston ("DaveJ")',
+        year: 'Marzo 2001 (CS 1.1)',
+        bg: 'linear-gradient(135deg, #3b2a19 0%, #6b4b28 55%, #1d1a16 100%)',
+        desc: 'El mapa más reconocible en la historia de los FPS. Construido como una secuela mejorada de de_dust con una estructura clásica de tres carriles (Long A, Mid y Túneles B) inspirada en la arquitectura marroquí.',
+        callouts: ['Long A', 'Catwalk / Short', 'Puertas Mid', 'Túneles B', 'Goose']
+      },
+      {
+        code: 'de_mirage',
+        name: 'Mirage',
+        creator: 'Michael Hüll ("BubkeZ") / Valve',
+        year: '2004 (de_cpl_strike) · 2013 (Oficial)',
+        bg: 'linear-gradient(135deg, #3a2417 0%, #734022 55%, #1c191a 100%)',
+        desc: 'Nació como de_cpl_strike para los torneos CPL, se liberó como Mirage en 2010 y Valve lo rediseñó en 2013 con estética marroquí. Es el único mapa que jamás ha salido del pool de Majors desde 2013.',
+        callouts: ['Palacio', 'Connector', 'Jungle', 'Window', 'Apartamentos B']
+      },
+      {
+        code: 'de_inferno',
+        name: 'Inferno',
+        creator: 'Christopher Auty ("Barney")',
+        year: '1999 (Beta) · 2001 (CS 1.1)',
+        bg: 'linear-gradient(135deg, #331e1c 0%, #6c3329 55%, #1a181b 100%)',
+        desc: 'Famoso por sus ángulos cerrados y batallas tácticas por la utilidad. Evolucionó hacia una pintoresca villa italiana soleada en CS:GO y CS2, protagonizando algunas de las finales de Major más dramáticas.',
+        callouts: ['Banana', 'Apartamentos', 'Pit', 'Arch / Librería', 'Coffins']
+      },
+      {
+        code: 'de_nuke',
+        name: 'Nuke',
+        creator: 'Jo Bieg',
+        year: 'Noviembre 1999 (Beta 4.0)',
+        bg: 'linear-gradient(135deg, #162533 0%, #244766 55%, #151921 100%)',
+        desc: 'Pionero en verticalidad competitiva: sus dos sites de bomba (A arriba y B subterráneo) están apilados uno sobre otro. Históricamente CT-sided, exige rotaciones veloces por conductos y control de Exterior.',
+        callouts: ['Ramp', 'Secret', 'Heaven', 'Silo', 'Vents / Hut']
+      },
+      {
+        code: 'de_train',
+        name: 'Train',
+        creator: 'Christopher Mair ("Cancerboy")',
+        year: 'Diciembre 1999 (Beta 5.0) · Remake CS2 Nov 2024',
+        bg: 'linear-gradient(135deg, #1b2229 0%, #344352 55%, #14181e 100%)',
+        desc: 'Estación ferroviaria industrial dominada por largas líneas de AWP y control de vagones. En noviembre de 2024 regresó oficialmente a Counter-Strike 2 con un remake completo lluvioso y rediseño de Popdog y Site A.',
+        callouts: ['Ivy', 'Popdog', 'Longdog', 'Heaven', 'Electric / Sandwich']
+      }
+    ];
+
+    /* =====================================================================
+       HILOS DEL FORO / WIKI (CONTENIDO PRINCIPAL + COMENTARIOS INICIALES)
+    ===================================================================== */
+    const THREADS_DATA = [
+      {
+        id: 'thread-historia',
+        category: 'historia',
+        categoryLabel: 'Historia y Orígenes',
+        title: 'De Mod Amateur de Half-Life a Rey del FPS Táctico: Minh Le, Jess Cliffe y Valve',
+        author: 'Admin_Gooseman',
+        authorAvatar: 'MG',
+        avatarBg: '#de9b35',
+        authorRole: 'FUNDADOR WIKI',
+        date: 'Fijado · Actualizado 2026',
+        readTime: '4 min lectura',
+        baseVotes: 412,
+        tags: [
+          { text: 'Historia', cls: 'tag-gold' },
+          { text: '1999–2000', cls: 'tag-ct' },
+          { text: 'Half-Life Mod', cls: 'tag-sky' }
+        ],
+        lead: 'Cómo dos estudiantes universitarios programaron en su tiempo libre el mod que cambió para siempre los cibercafés, las LAN y la industria global de los esports.',
+        searchExtra: 'minh le gooseman jess cliffe valve half life beta 1.0 1999 2000 goldsrc quake cibercafe',
+        comments: [
+          { author: 'CyberCafe_2001', rank: 'Veterano 1.6', time: 'hace 3h', text: 'Todavía recuerdo ir al ciber con mis amigos después del colegio a jugar cs_mansion y de_aztec en LAN. Que todo empezara como un mod gratuito sigue siendo una locura.' },
+          { author: 'Tactical_IGL', rank: 'Global Elite', time: 'hace 1h', text: 'Lo más brillante de Valve fue contratar a Minh Le y Jess Cliffe en vez de intentar copiarles la fórmula. Mantuvieron intacto el ADN del gunplay.' },
+          { author: 'EcoRound_Enjoyer', rank: 'Faceit Lvl 8', time: 'hace 28m', text: 'Dato loco: Jess Cliffe fue quien puso la voz original de los comandos de radio ("Fire in the hole!", "Bomb has been planted").' }
+        ],
+        renderBody: () => `
+          <div class="media-frame">
+            <img
+              src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/10/header.jpg"
+              alt="Counter-Strike clásico en Steam"
+              data-fb-title="COUNTER-STRIKE 1999"
+              data-fb-sub="HALF-LIFE MOD · MINH LE &amp; JESS CLIFFE"
+              data-fb-accent="#de9b35"
+              onerror="handleImgFallback(this)"
+            />
+            <div class="media-caption">
+              <span>Portada clásica de Counter-Strike (App ID 10 · Era GoldSrc)</span>
+              <span class="mono">BETA 1.0 · 19 JUN 1999</span>
+            </div>
+          </div>
+          <div class="wiki-prose">
+            <p>A principios de 1999, <strong>Minh Le ("Gooseman")</strong> —estudiante de informática en la Universidad Simon Fraser que ya había experimentado con mods de Quake II como <em>Action Quake 2</em>— decidió crear un shooter realista centrado en operaciones antiterroristas sobre el nuevo SDK de <em>Half-Life</em>. Poco después se unió <strong>Jess Cliffe</strong>, encargado del sitio web comunitario, el diseño sonoro, las voces de radio y el feedback directo con los jugadores.</p>
+            <p>El <strong>19 de junio de 1999</strong> publicaron <strong>Counter-Strike Beta 1.0</strong>. El éxito fue inmediato e imparable: en menos de un año, el mod gratuito superaba en jugadores simultáneos a shooters comerciales de gran presupuesto como <em>Quake III Arena</em> y <em>Unreal Tournament</em>.</p>
+          </div>
+          <div class="callout">
+            <strong>La Adquisición de Valve (Abril – Noviembre 2000):</strong> Al comprobar el fenómeno global en servidores online y cibercafés, <strong>Valve Corporation</strong> adquirió la propiedad intelectual de Counter-Strike en 2000 y contrató a Minh Le y Jess Cliffe. El <strong>9 de noviembre de 2000</strong> se lanzó oficialmente <strong>Counter-Strike 1.0</strong> en formato retail, inaugurando una franquicia que domina Steam más de un cuarto de siglo después.
+          </div>
+          <div class="table-wrap">
+            <table class="cs-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Hito Fundacional</th>
+                  <th>Impacto en la Comunidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:var(--font-mono);color:var(--cs-gold-bright);">19 Jun 1999</td>
+                  <td><strong>Beta 1.0 (Mod Half-Life)</strong></td>
+                  <td>Primer lanzamiento público; solo mapas de rehenes (<code>cs_</code>) y 9 armas iniciales.</td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--font-mono);color:var(--cs-gold-bright);">Nov 1999</td>
+                  <td><strong>Beta 4.0 (Modo Bomba)</strong></td>
+                  <td>Introduce el modo <code>de_</code> (Defusal) con la C4 y mapas icónicos como Nuke.</td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--font-mono);color:var(--cs-gold-bright);">Abr 2000</td>
+                  <td><strong>Compra por Valve</strong></td>
+                  <td>Minh Le y Jess Cliffe se unen a Valve para profesionalizar el desarrollo.</td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--font-mono);color:var(--cs-gold-bright);">9 Nov 2000</td>
+                  <td><strong>Lanzamiento Retail v1.0</strong></td>
+                  <td>Explosión mundial de torneos LAN (CPL, WCG, ESWC) y cultura de clanes.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `
+      },
+      {
+        id: 'thread-motores',
+        category: 'motores',
+        categoryLabel: 'Juegos y Motores',
+        title: 'Evolución Tecnológica: De GoldSrc (CS 1.6) a Source 2 (Counter-Strike 2)',
+        author: 'Valve_TechOps',
+        authorAvatar: 'S2',
+        avatarBg: '#5e98d9',
+        authorRole: 'INGENIERÍA',
+        date: 'Hilo Técnico · Source 2',
+        readTime: '5 min lectura',
+        baseVotes: 368,
+        tags: [
+          { text: 'Motores Gráficos', cls: 'tag-sky' },
+          { text: 'Source 2', cls: 'tag-gold' },
+          { text: 'Sub-Tick', cls: 'tag-ct' }
+        ],
+        lead: 'Línea temporal completa de cada entrega principal de la saga, el salto entre GoldSrc, Source y Source 2, y cómo los humos volumétricos y el sub-tick cambiaron el meta.',
+        searchExtra: 'cs 1.6 condition zero counter strike source csgo global offensive cs2 source 2 goldsrc volumetric smoke sub-tick tickrate 128 64',
+        comments: [
+          { author: 'Bhop_Scriptless', rank: '1.6 Purist', time: 'hace 4h', text: 'El movimiento y el wallbang de 1.6 en GoldSrc tenían una magia única, pero hay que admitir que romper un humo con una granada HE en CS2 abrió una capa táctica increíble.' },
+          { author: 'SubTick_Skeptic', rank: 'Premier 21k', time: 'hace 2h', text: 'Al principio de CS2 el sub-tick se sentía raro con el peeker\'s advantage, pero tras las actualizaciones de red y animaciones el juego está muchísimo más fino.' }
+        ],
+        renderBody: () => `
+          <div class="timeline-grid">
+            <article class="era-card">
+              <div class="era-img-wrap">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/10/header.jpg" alt="Counter-Strike 1.6" data-fb-title="CS 1.6" data-fb-sub="GOLDSRC · 2003" data-fb-accent="#de9b35" onerror="handleImgFallback(this)" />
+                <span class="era-year">SEP 2003</span>
+                <span class="era-engine">GoldSrc</span>
+              </div>
+              <div class="era-body">
+                <h3 class="era-title">Counter-Strike 1.6</h3>
+                <p class="era-text">Llegó junto al estreno de Steam. Consolidó el gunplay más purista, el wallbang extremo, el movimiento aéreo (duck-jump/strafe) y dominó los esports durante casi una década.</p>
+              </div>
+            </article>
+
+            <article class="era-card">
+              <div class="era-img-wrap">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/80/header.jpg" alt="Counter-Strike Condition Zero" data-fb-title="CONDITION ZERO" data-fb-sub="GOLDSRC · 2004" data-fb-accent="#5e98d9" onerror="handleImgFallback(this)" />
+                <span class="era-year">MAR 2004</span>
+                <span class="era-engine">GoldSrc+</span>
+              </div>
+              <div class="era-body">
+                <h3 class="era-title">Condition Zero</h3>
+                <p class="era-text">Desarrollado junto a Turtle Rock Studios. Introdujo bots tácticos inteligentes, campaña para un jugador (<em>Deleted Scenes</em>) y modelos actualizados sobre GoldSrc.</p>
+              </div>
+            </article>
+
+            <article class="era-card">
+              <div class="era-img-wrap">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/240/header.jpg" alt="Counter-Strike Source" data-fb-title="CS: SOURCE" data-fb-sub="MOTOR SOURCE · 2004" data-fb-accent="#4b69ff" onerror="handleImgFallback(this)" />
+                <span class="era-year">NOV 2004</span>
+                <span class="era-engine">Source</span>
+              </div>
+              <div class="era-body">
+                <h3 class="era-title">Counter-Strike: Source</h3>
+                <p class="era-text">Remake completo en el motor Source de <em>Half-Life 2</em>. Trajo físicas Havok (barriles, ragdolls), iluminación dinámica y originó la escena competitiva francesa y británica moderna.</p>
+              </div>
+            </article>
+
+            <article class="era-card">
+              <div class="era-img-wrap">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/730/capsule_616x353.jpg" alt="CS:GO Era" data-fb-title="CS:GO" data-fb-sub="SOURCE ENGINE · 2012" data-fb-accent="#eb4b4b" onerror="handleImgFallback(this)" />
+                <span class="era-year">AGO 2012</span>
+                <span class="era-engine">Source (2012)</span>
+              </div>
+              <div class="era-body">
+                <h3 class="era-title">CS: Global Offensive</h3>
+                <p class="era-text">Reunificó a las comunidades de 1.6 y Source. Añadió Matchmaking, granadas incendiarias/Molotov, Majors financiados por Valve y la economía global de skins (2013), superando 1.8 millones de jugadores simultáneos.</p>
+              </div>
+            </article>
+
+            <article class="era-card" style="border-color:rgba(222,155,53,0.5);">
+              <div class="era-img-wrap">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/730/header.jpg" alt="Counter-Strike 2" data-fb-title="COUNTER-STRIKE 2" data-fb-sub="SOURCE 2 · 2023" data-fb-accent="#f4b850" onerror="handleImgFallback(this)" />
+                <span class="era-year">SEP 2023</span>
+                <span class="era-engine" style="background:#de9b35;color:#111;font-weight:700;">Source 2</span>
+              </div>
+              <div class="era-body">
+                <h3 class="era-title">Counter-Strike 2 (CS2)</h3>
+                <p class="era-text">Reemplazo gratuito sobre <strong>Source 2</strong> (27 sep 2023): iluminación PBR, formato competitivo MR12, <strong>humos volumétricos reactivos</strong> a balas y granadas HE, y arquitectura <strong>sub-tick</strong>.</p>
+              </div>
+            </article>
+          </div>
+          <div class="callout">
+            <strong>¿Qué hace único a Source 2 en CS2?</strong><br />
+            1) <strong>Humos Volumétricos 3D:</strong> El humo es un objeto físico compartido por todos los jugadores que rellena espacios reales, se ilumina según el entorno y se disipa temporalmente con disparos o explosiones de granadas HE.<br />
+            2) <strong>Arquitectura Sub-Tick:</strong> En lugar de esperar al siguiente intervalo fijo del servidor (tick), el servidor registra la marca temporal exacta en la que disparaste, saltaste o lanzaste una granada entre ticks.
+          </div>
+        `
+      },
+      {
+        id: 'thread-leyendas',
+        category: 'leyendas',
+        categoryLabel: 'Pro Players',
+        title: 'Salón de la Fama: Los 9 Pro Players Legendarios que Definieron el Circuito',
+        author: 'HLTV_Archivist',
+        authorAvatar: 'GG',
+        avatarBg: '#4b69ff',
+        authorRole: 'ANALISTA HLTV',
+        date: 'Ranking Verificado · 2026',
+        readTime: '7 min lectura',
+        baseVotes: 549,
+        tags: [
+          { text: 'Pro Players', cls: 'tag-ct' },
+          { text: 'GOAT Debate', cls: 'tag-gold' },
+          { text: 'Majors & MVPs', cls: 'tag-t' }
+        ],
+        lead: 'De la época dorada sueca de 1.6 y el dominio brasileño hasta el reinado de ZywOo, s1mple, dev1ce y la irrupción histórica de donk en CS2. Haz clic en cualquier jugador para inspeccionar su ficha completa.',
+        searchExtra: 's1mple zywoo f0rest get_right fallen dev1ce coldzera niko donk hltv major mvp navi vitality spirit astralis nip sk gaming g2',
+        comments: [
+          { author: 'Vitality_Bee', rank: 'HLTV Forum', time: 'hace 5h', text: 'Después de 2025 ya no hay debate serio: ZywOo con 4 HLTV #1 y múltiples Majors es el jugador más completo que ha tocado un teclado.' },
+          { author: 'NaVi_BornToWin', rank: 'AWP Main', time: 'hace 2h', text: 'ZywOo tiene la consistencia, pero el peak de s1mple en 2021 (8 MVPs y Major invicto) y el nivel de donk a los 17 años en Shanghai son cosas de otro planeta.' },
+          { author: 'NiKo_Deagle', rank: 'Rifler', time: 'hace 41m', text: 'Solo pido una cosa antes de retirarme de ver CS: que NiKo levante un Major de una vez por todas.' }
+        ],
+        renderBody: () => `
+          <div class="players-grid">
+            ${PLAYERS.map((p) => `
+              <button type="button" class="player-card" onclick="openPlayerModal('${p.id}')">
+                <div class="player-head">
+                  <span class="player-nick">${p.nick}</span>
+                  <span class="player-flag">${p.country}</span>
+                </div>
+                <div class="player-name">${p.fullName} · ${p.teams}</div>
+                <div class="player-stats">
+                  <span class="mini-stat gold">${p.role}</span>
+                  <span class="mini-stat">${p.era}</span>
+                </div>
+                <p class="player-summary">${p.summary}</p>
+                <div class="inspect-hint">&#9656; Ver palmarés completo</div>
+              </button>
+            `).join('')}
+          </div>
+        `
+      },
+      {
+        id: 'thread-jugadas',
+        category: 'jugadas',
+        categoryLabel: 'Jugadas Míticas',
+        title: 'Inmortalizados en los Mapas: Graffitis y Jugadas Legendarias de Counter-Strike',
+        author: 'FragMovie_Curator',
+        authorAvatar: 'FM',
+        avatarBg: '#eb4b4b',
+        authorRole: 'HISTORIADOR',
+        date: 'Archivo de Majors',
+        readTime: '6 min lectura',
+        baseVotes: 486,
+        tags: [
+          { text: 'Graffitis', cls: 'tag-t' },
+          { text: 'Highlights', cls: 'tag-gold' },
+          { text: 'Majors', cls: 'tag-purple' }
+        ],
+        lead: 'Cuando una jugada supera lo humanamente esperado en el escenario más grande, Valve la pinta para siempre en las paredes del mapa. Haz clic en cada tarjeta para abrir el visor táctico ampliado.',
+        searchExtra: 'coldzera jumping double mirage s1mple falling awp cache olofmeister olofboost overpass burning defuse happy deagle ace inferno ninja defuse graffiti',
+        comments: [
+          { author: 'Mirage_B_Anchor', rank: 'LVL 10', time: 'hace 6h', text: 'Cada vez que paso por Van en Mirage miro el graffiti del AWP alado. Ese round en 15-9 cambió la historia del CS sudamericano para siempre.' },
+          { author: 'Cache_Enjoyer', rank: 'Old School', time: 'hace 3h', text: 'La narración de James Bardolph ("This is not FPL, this is a Major!") con s1mple cayendo de Heaven en Cache me sigue poniendo la piel de gallina.' },
+          { author: 'Banana_Molotov', rank: 'Entry', time: 'hace 50m', text: 'El Ace de Happy con Deagle en Inferno + Semmler gritando "Dupreeh is sweating bullets" es cine puro.' }
+        ],
+        renderBody: () => `
+          <div class="plays-grid">
+            ${ICONIC_PLAYS.map((play) => `
+              <article class="play-card" tabindex="0" role="button" onclick="openPlayModal('${play.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openPlayModal('${play.id}');}">
+                <div class="play-visual" style="background:${play.gradient};">
+                  <span class="play-map-pill">${play.map.split(' ')[0]}</span>
+                  <span class="play-year-pill">${play.year}</span>
+                  ${play.svg}
+                </div>
+                <div class="play-body">
+                  <div class="play-event">${play.event}</div>
+                  <h3 class="play-title">${play.title}</h3>
+                  <p class="play-desc">${play.summary}</p>
+                  <div class="inspect-hint">&#128269; Abrir visor ampliado y relato</div>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        `
+      },
+      {
+        id: 'thread-skins',
+        category: 'skins',
+        categoryLabel: 'Mercado de Skins',
+        title: 'La Revolución Arms Deal (2013): Economía, Float, Patrones y Skins Míticas',
+        author: 'BlueGem_Broker',
+        authorAvatar: 'BG',
+        avatarBg: '#d32ce6',
+        authorRole: 'ECONOMÍA CS',
+        date: 'Guía del Mercado',
+        readTime: '6 min lectura',
+        baseVotes: 423,
+        tags: [
+          { text: 'Arms Deal 2013', cls: 'tag-pink' },
+          { text: 'Float & Seeds', cls: 'tag-purple' },
+          { text: 'Contraband', cls: 'tag-gold' }
+        ],
+        lead: 'El 14 de agosto de 2013 Valve lanzó la actualización Arms Deal, introduciendo skins cosméticas, StatTrak™ y cajas que convirtieron el inventario de Counter-Strike en una economía multimillonaria. Prueba el inspector de Float y haz clic en cada skin mítica.',
+        searchExtra: 'arms deal 2013 skins float factory new minimal wear field tested well worn battle scarred case hardened 661 blue gem awp dragon lore karambit fade m4a4 howl contraband',
+        comments: [
+          { author: 'TradeUp_Gambler', rank: 'Trader', time: 'hace 5h', text: 'Pensar que en 2014 la gente vendía M4A4 Howl en el mercado de Steam por 60 dólares antes del DMCA... hoy es una reliquia intocable.' },
+          { author: 'Float_0001', rank: 'Collector', time: 'hace 2h', text: 'Buenísimo el simulador de Float. Muchos jugadores nuevos no saben que skins como el Karambit Fade tienen "float cap" de 0.08 y por eso no existen en Field-Tested.' }
+        ],
+        renderBody: () => `
+          <div class="wiki-prose">
+            <p>La actualización <strong>Arms Deal (14 de agosto de 2013)</strong> salvó y catapultó a CS:GO: financió los primeros premios de los <strong>CS:GO Majors</strong> (250,000 USD iniciales) e inauguró un mercado abierto basado en tres pilares: <strong>Rareza</strong> (de Gris Consumidor a Rojo Encubierto, Contrabando y Oro), <strong>Desgaste (Float Value)</strong> de <code>0.0000</code> a <code>1.0000</code> asignado de forma inmutable al abrir el arma, y <strong>Paint Seed</strong> (patrón del 1 al 1000 que decide joyas como los <em>Case Hardened Blue Gem</em> o los <em>Fade</em>).</p>
+          </div>
+
+          <!-- Simulador Interactivo de Float Value -->
+          <div class="float-lab">
+            <div class="float-lab-header">
+              <div class="float-lab-title">&#9881; Inspector Interactivo de Desgaste (Float Value)</div>
+              <div class="float-readout">
+                <span id="floatValueNum" style="color:#fff;">0.032</span>
+                <span id="floatTierBadge" class="float-badge" style="background:#2dd4bf;">Recién Fabricado (FN)</span>
+              </div>
+            </div>
+            <div class="float-bar-track"></div>
+            <input type="range" id="floatSlider" class="float-slider" min="0" max="1" step="0.001" value="0.032" aria-label="Selector interactivo de Float Value" />
+            <div class="float-scale">
+              <span>0.00 FN</span>
+              <span>0.07 MW</span>
+              <span>0.15 FT</span>
+              <span>0.38 WW</span>
+              <span>0.45–1.00 BS</span>
+            </div>
+            <div class="float-preview-note">
+              <span id="floatDescText">Acabado impecable de fábrica: brillo metálico intacto y esquinas limpias.</span>
+              <div class="wear-swatch" title="Simulación de desgaste visual">
+                <div class="wear-overlay" id="wearOverlay"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="skins-grid">
+            ${SKINS.map((skin) => `
+              <article class="skin-card" style="border-top-color:${skin.rarityHex};" tabindex="0" role="button" onclick="openSkinModal('${skin.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSkinModal('${skin.id}');}">
+                <div class="skin-stage" style="background:${skin.bg};">
+                  <span class="skin-rarity-tag" style="background:${skin.rarityHex};">${skin.rarity.split(' ')[0]}</span>
+                  <span class="skin-price-tag">${skin.price.split(' ')[0]}</span>
+                  ${skin.svg}
+                </div>
+                <div class="skin-body">
+                  <h3 class="skin-name">${skin.name}</h3>
+                  <div class="skin-sub">Float: ${skin.floatRange}</div>
+                  <p class="skin-desc">${skin.summary}</p>
+                  <div class="inspect-hint">&#128269; Inspeccionar skin y lore</div>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        `
+      },
+      {
+        id: 'thread-mapas',
+        category: 'mapas',
+        categoryLabel: 'Mapas Clásicos',
+        title: 'Arquitectura del Caos: Historia de Dust II, Mirage, Inferno, Nuke y Train',
+        author: 'Hammer_Mapper',
+        authorAvatar: 'HM',
+        avatarBg: '#2dd4bf',
+        authorRole: 'LEVEL DESIGN',
+        date: 'Active Duty &amp; Legado',
+        readTime: '5 min lectura',
+        baseVotes: 391,
+        tags: [
+          { text: 'Mapas Clásicos', cls: 'tag-sky' },
+          { text: 'Level Design', cls: 'tag-gold' },
+          { text: 'Callouts', cls: 'tag-ct' }
+        ],
+        lead: 'Antes de los grandes estudios, diseñadores comunitarios armados con WorldCraft y Hammer Editor crearon los tableros de ajedrez tácticos más duraderos de los videojuegos.',
+        searchExtra: 'dust ii dust2 mirage de_cpl_strike inferno nuke train dave johnston bubkez chris auty jo bieg christopher mair callouts banana long mid',
+        comments: [
+          { author: 'RushB_NoStop', rank: 'Silver Elite', time: 'hace 4h', text: 'Pueden pasar 30 años y Dust II seguirá siendo el mapa donde entras a calentar y terminas jugando 5 partidos seguidos.' },
+          { author: 'Nuke_Vents', rank: 'IGL', time: 'hace 1h', text: 'El remake de Train con lluvia en CS2 quedó brutal visualmente, aunque todavía extraño hacer el salto clásico en Popdog.' }
+        ],
+        renderBody: () => `
+          <div class="maps-grid">
+            ${CLASSIC_MAPS.map((m) => `
+              <article class="map-card">
+                <div class="map-banner" style="background:${m.bg};">
+                  <svg class="map-radar-bg" viewBox="0 0 100 100" fill="none">
+                    <circle cx="50" cy="50" r="44" stroke="#eef2f6" stroke-width="1.5" stroke-dasharray="4 4"/>
+                    <circle cx="50" cy="50" r="24" stroke="#de9b35" stroke-width="1.2"/>
+                    <path d="M18 50 H82 M50 18 V82" stroke="#eef2f6" stroke-width="1"/>
+                    <rect x="28" y="28" width="12" height="12" fill="#eb4b4b" fill-opacity="0.7"/>
+                    <rect x="60" y="60" width="12" height="12" fill="#4b69ff" fill-opacity="0.7"/>
+                  </svg>
+                  <div>
+                    <span class="map-code">${m.code}</span>
+                    <h3 class="map-title">${m.name}</h3>
+                  </div>
+                </div>
+                <div class="map-body">
+                  <div class="map-meta">Creador: ${m.creator} · ${m.year}</div>
+                  <p class="map-desc">${m.desc}</p>
+                  <div class="callouts-row">
+                    ${m.callouts.map((c) => `<span class="callout-pill">${c}</span>`).join('')}
+                  </div>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        `
+      }
+    ];
+
+    /* =====================================================================
+       ESTADO DE LA APLICACIÓN + PERSISTENCIA EN LOCALSTORAGE
+    ===================================================================== */
+    const STORAGE_KEY = 'cs_archive_state_v1';
+
+    function loadSavedState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { votedIds: [], userComments: {} };
+        const parsed = JSON.parse(raw);
+        return {
+          votedIds: Array.isArray(parsed.votedIds) ? parsed.votedIds : [],
+          userComments: parsed.userComments && typeof parsed.userComments === 'object' ? parsed.userComments : {}
+        };
+      } catch {
+        return { votedIds: [], userComments: {} };
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          votedIds: Array.from(state.votedIds),
+          userComments: state.userComments
+        }));
+      } catch {
+        // Ignorar si almacenamiento local está restringido
+      }
+    }
+
+    const saved = loadSavedState();
+    const state = {
+      category: 'all',
+      search: '',
+      sort: 'featured',
+      factIndex: 0,
+      floatValue: 0.032,
+      votedIds: new Set(saved.votedIds),
+      userComments: saved.userComments,
+      collapsedIds: new Set()
+    };
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getAllComments(thread) {
+      const extra = state.userComments[thread.id] || [];
+      return [...thread.comments, ...extra];
+    }
+
+    function getVoteCount(thread) {
+      return thread.baseVotes + (state.votedIds.has(thread.id) ? 1 : 0);
+    }
+
+    /* =====================================================================
+       RENDERIZADO DE WIDGETS LATERALES
+    ===================================================================== */
+    function renderSidebarWidgets() {
+      // Dato curioso
+      const fact = FUN_FACTS[state.factIndex];
+      document.getElementById('factCategory').textContent = fact.cat;
+      document.getElementById('factText').textContent = fact.text;
+      document.getElementById('factCounter').textContent = `${state.factIndex + 1}/${FUN_FACTS.length}`;
+
+      // Rarezas de skins
+      const rarityTable = document.getElementById('rarityTable');
+      rarityTable.innerHTML = RARITIES.map((r) => `
+        <div class="rarity-row" style="--r-color:${r.hex};">
+          <div class="rarity-name">
+            <strong>${r.es}</strong>
+            <span>${r.en}</span>
+          </div>
+          <span class="rarity-hex">${r.hex.toUpperCase()}</span>
+        </div>
+      `).join('');
+
+      // Top 5 jugadores históricos
+      const top5Order = [
+        { id: 'zywoo', tag: '4x #1 · 3 Majors' },
+        { id: 's1mple', tag: '3x #1 · CS:GO GOAT' },
+        { id: 'dev1ce', tag: '4x Major Champ' },
+        { id: 'f0rest', tag: '1.6 & GO Legend' },
+        { id: 'donk', tag: 'CS2 Prodigy · 1.49' }
+      ];
+      const top5List = document.getElementById('top5List');
+      top5List.innerHTML = top5Order.map((entry, idx) => {
+        const player = PLAYERS.find((p) => p.id === entry.id);
+        return `
+          <button type="button" class="top5-item" onclick="openPlayerModal('${player.id}')">
+            <span class="top5-rank">#${idx + 1}</span>
+            <div class="top5-info">
+              <div class="top5-nick">${player.nick} <span style="font-size:0.72rem;color:var(--text-muted);font-family:var(--font-mono);">[${player.country}]</span></div>
+              <div class="top5-sub">${player.teams}</div>
+            </div>
+            <span class="top5-badge">${entry.tag}</span>
+          </button>
+        `;
+      }).join('');
+
+      // Enlaces de salto rápido
+      const quickJump = document.getElementById('quickJumpLinks');
+      quickJump.innerHTML = THREADS_DATA.map((t) => `
+        <button type="button" class="quick-link" onclick="jumpToThread('${t.id}')">${t.categoryLabel}</button>
+      `).join('');
+    }
+
+    function updateLiveStats() {
+      let totalComments = 0;
+      THREADS_DATA.forEach((t) => {
+        totalComments += getAllComments(t).length;
+      });
+      document.getElementById('sidebarCommentCount').textContent = totalComments;
+      document.getElementById('sidebarUpvoteCount').textContent = state.votedIds.size;
+    }
+
+    /* =====================================================================
+       RENDERIZADO DEL FEED PRINCIPAL DE HILOS
+    ===================================================================== */
+    function getFilteredThreads() {
+      const q = state.search.trim().toLowerCase();
+      let list = THREADS_DATA.filter((thread) => {
+        const catMatch = state.category === 'all' || thread.category === state.category;
+        if (!catMatch) return false;
+        if (!q) return true;
+        const commentsText = getAllComments(thread).map((c) => `${c.author} ${c.text}`).join(' ');
+        const haystack = [
+          thread.title,
+          thread.lead,
+          thread.author,
+          thread.categoryLabel,
+          thread.searchExtra,
+          thread.tags.map((t) => t.text).join(' '),
+          commentsText
+        ].join(' ').toLowerCase();
+        return haystack.includes(q);
+      });
+
+      if (state.sort === 'votes') {
+        list = [...list].sort((a, b) => getVoteCount(b) - getVoteCount(a));
+      } else if (state.sort === 'comments') {
+        list = [...list].sort((a, b) => getAllComments(b).length - getAllComments(a).length);
+      }
+      return list;
+    }
+
+    function renderThreads() {
+      const container = document.getElementById('threadsContainer');
+      const emptyState = document.getElementById('emptyState');
+      const feedStatus = document.getElementById('feedStatus');
+      const visible = getFilteredThreads();
+
+      const catText = state.category === 'all' ? 'todas las categorías' : `categoría "${state.category}"`;
+      const queryText = state.search.trim() ? ` · filtro: "${escapeHtml(state.search.trim())}"` : '';
+      feedStatus.innerHTML = `Mostrando <strong>${visible.length}</strong> de ${THREADS_DATA.length} hilos (${catText}${queryText})`;
+
+      if (visible.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.add('visible');
+        return;
+      }
+
+      emptyState.classList.remove('visible');
+      container.innerHTML = visible.map((thread) => {
+        const voted = state.votedIds.has(thread.id);
+        const votes = getVoteCount(thread);
+        const allComments = getAllComments(thread);
+        const isCollapsed = state.collapsedIds.has(thread.id);
+
+        return `
+          <article class="thread-card ${isCollapsed ? 'collapsed' : ''}" id="${thread.id}">
+            <div class="thread-shell">
+              <div class="vote-col">
+                <button
+                  type="button"
+                  class="vote-btn ${voted ? 'voted' : ''}"
+                  onclick="toggleVote('${thread.id}')"
+                  aria-pressed="${voted}"
+                  title="${voted ? 'Quitar voto positivo' : 'Dar voto positivo (Upvote)'}"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 19V5M5 12l7-7 7 7" />
+                  </svg>
+                </button>
+                <span class="vote-count" id="votes-${thread.id}">${votes}</span>
+                <span class="vote-label">UPVOTES</span>
+              </div>
+
+              <div class="thread-main">
+                <div class="thread-meta">
+                  <span class="author-badge">
+                    <span class="author-avatar" style="background:${thread.avatarBg};">${thread.authorAvatar}</span>
+                    ${thread.author}
+                  </span>
+                  <span class="role-chip tag-gold">${thread.authorRole}</span>
+                  <span>&#8226; ${thread.date}</span>
+                  <span>&#8226; ${thread.readTime}</span>
+                </div>
+
+                <div class="tag-row">
+                  ${thread.tags.map((tag) => `<span class="tag ${tag.cls}">${tag.text}</span>`).join('')}
+                </div>
+
+                <div class="thread-header-row">
+                  <h2 class="thread-title">${thread.title}</h2>
+                  <button type="button" class="toggle-btn" onclick="toggleCollapse('${thread.id}')">
+                    ${isCollapsed ? 'Expandir hilo &#9662;' : 'Contraer &#9652;'}
+                  </button>
+                </div>
+
+                <p class="thread-lead">${thread.lead}</p>
+
+                <div class="thread-content">
+                  ${thread.renderBody()}
+                </div>
+
+                <section class="comments-section" aria-label="Comentarios de la comunidad">
+                  <div class="comments-header">
+                    <h3 class="comments-title">
+                      Comentarios de la Comunidad
+                      <span class="comments-count-badge" id="comment-count-${thread.id}">${allComments.length}</span>
+                    </h3>
+                  </div>
+
+                  <div class="comments-list" id="comments-list-${thread.id}">
+                    ${allComments.map((c) => `
+                      <div class="comment-item">
+                        <div class="comment-top">
+                          <span class="comment-author">
+                            ${escapeHtml(c.author)}
+                            <span class="comment-rank">${escapeHtml(c.rank || 'Agente')}</span>
+                          </span>
+                          <span class="comment-time">${escapeHtml(c.time)}</span>
+                        </div>
+                        <p class="comment-text">${escapeHtml(c.text)}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+
+                  <form class="comment-form" onsubmit="submitComment(event, '${thread.id}')">
+                    <input
+                      type="text"
+                      name="author"
+                      class="comment-input"
+                      maxlength="24"
+                      placeholder="Tu nick (ej. RushB_99)"
+                      aria-label="Tu apodo de jugador"
+                    />
+                    <input
+                      type="text"
+                      name="message"
+                      class="comment-input"
+                      maxlength="320"
+                      required
+                      placeholder="Añade tu opinión al hilo (ej. estrategia, skins, GOAT)..."
+                      aria-label="Escribir nuevo comentario"
+                    />
+                    <button type="submit" class="comment-submit">Publicar</button>
+                  </form>
+                </section>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      bindFloatInspector();
+      updateLiveStats();
+    }
+
+    /* =====================================================================
+       INTERACTIVIDAD: VOTOS, COMENTARIOS, FILTROS, FLOAT LAB Y MODALES
+    ===================================================================== */
+    window.toggleVote = function (threadId) {
+      if (state.votedIds.has(threadId)) {
+        state.votedIds.delete(threadId);
+      } else {
+        state.votedIds.add(threadId);
+      }
+      saveState();
+      renderThreads();
+    };
+
+    window.toggleCollapse = function (threadId) {
+      if (state.collapsedIds.has(threadId)) {
+        state.collapsedIds.delete(threadId);
+      } else {
+        state.collapsedIds.add(threadId);
+      }
+      renderThreads();
+    };
+
+    window.submitComment = function (event, threadId) {
+      event.preventDefault();
+      const form = event.target;
+      const authorInput = form.elements.author;
+      const msgInput = form.elements.message;
+      const text = msgInput.value.trim();
+      if (!text) return;
+
+      const author = authorInput.value.trim() || 'Agente_Anónimo';
+      if (!state.userComments[threadId]) {
+        state.userComments[threadId] = [];
+      }
+      state.userComments[threadId].push({
+        author,
+        rank: 'Comunidad · Tú',
+        time: 'ahora mismo',
+        text
+      });
+      saveState();
+      msgInput.value = '';
+      renderThreads();
+
+      const listEl = document.getElementById(`comments-list-${threadId}`);
+      if (listEl && listEl.lastElementChild) {
+        listEl.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    };
+
+    function bindFloatInspector() {
+      const slider = document.getElementById('floatSlider');
+      if (!slider) return;
+      slider.value = state.floatValue;
+
+      const updateFloatUI = () => {
+        const val = parseFloat(slider.value);
+        state.floatValue = val;
+        const numEl = document.getElementById('floatValueNum');
+        const badgeEl = document.getElementById('floatTierBadge');
+        const descEl = document.getElementById('floatDescText');
+        const overlayEl = document.getElementById('wearOverlay');
+
+        numEl.textContent = val.toFixed(3);
+        let label = '';
+        let color = '#2dd4bf';
+        let desc = '';
+
+        if (val < 0.07) {
+          label = 'Recién Fabricado (FN)';
+          color = '#2dd4bf';
+          desc = '0.00 – 0.07 · Acabado impecable de fábrica: brillo metálico intacto y sin rasguños apreciables.';
+        } else if (val < 0.15) {
+          label = 'Casi Nuevo (MW)';
+          color = '#60a5fa';
+          desc = '0.07 – 0.15 · Desgaste mínimo en bordes muy puntuales; gran relación estética/precio.';
+        } else if (val < 0.38) {
+          label = 'Algo Desgastado (FT)';
+          color = '#facc15';
+          desc = '0.15 – 0.38 · El rango más común del mercado; marcas de combate visibles en cargador y cañón.';
+        } else if (val < 0.45) {
+          label = 'Bastante Desgastado (WW)';
+          color = '#fb923c';
+          desc = '0.38 – 0.45 · Pérdida notable de pintura y colores apagados; suele cotizar menos que FT.';
+        } else {
+          label = 'Deplorable (BS)';
+          color = '#ef4444';
+          desc = '0.45 – 1.00 · Desgaste extremo, metal expuesto u óxido (algunos coleccionistas buscan floats >0.99 "Blackiimov").';
+        }
+
+        badgeEl.textContent = label;
+        badgeEl.style.background = color;
+        descEl.textContent = desc;
+        overlayEl.style.opacity = Math.min(0.95, val * 1.05).toFixed(2);
+      };
+
+      slider.addEventListener('input', updateFloatUI);
+      updateFloatUI();
+    }
+
+    function setCategory(cat) {
+      state.category = cat;
+      document.querySelectorAll('[data-cat]').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+      });
+      renderThreads();
+    }
+
+    window.jumpToThread = function (threadId) {
+      if (state.category !== 'all') {
+        setCategory('all');
+      }
+      state.collapsedIds.delete(threadId);
+      renderThreads();
+      const target = document.getElementById(threadId);
+      if (target) {
+        const y = target.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+      document.getElementById('leftSidebar').classList.remove('mobile-open');
+    };
+
+    /* ================= MODAL AMPLIADO ================= */
+    const modal = document.getElementById('detailModal');
+    const modalVisual = document.getElementById('modalVisual');
+    const modalKicker = document.getElementById('modalKicker');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMeta = document.getElementById('modalMeta');
+    const modalQuote = document.getElementById('modalQuote');
+    const modalDesc = document.getElementById('modalDesc');
+
+    function openModal({ visualBg, visualHtml, kicker, title, metaItems, quote, desc }) {
+      modalVisual.style.background = visualBg;
+      modalVisual.innerHTML = visualHtml;
+      modalKicker.textContent = kicker;
+      modalTitle.textContent = title;
+      modalMeta.innerHTML = metaItems.map((m) => `
+        <div class="modal-stat">
+          <span>${m.label}</span>
+          <strong>${m.value}</strong>
+        </div>
+      `).join('');
+
+      if (quote) {
+        modalQuote.textContent = quote;
+        modalQuote.style.display = 'block';
+      } else {
+        modalQuote.style.display = 'none';
+      }
+      modalDesc.textContent = desc;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    window.openPlayModal = function (playId) {
+      const play = ICONIC_PLAYS.find((p) => p.id === playId);
+      if (!play) return;
+      openModal({
+        visualBg: play.gradient,
+        visualHtml: play.svg,
+        kicker: `JUGADA LEGENDARIA · ${play.event}`,
+        title: play.title,
+        metaItems: [
+          { label: 'Protagonista', value: play.player },
+          { label: 'Partido', value: play.team },
+          { label: 'Mapa / Zona', value: play.map },
+          { label: 'Graffiti / Legado', value: play.graffiti }
+        ],
+        quote: play.quote,
+        desc: play.details
+      });
+    };
+
+    window.openSkinModal = function (skinId) {
+      const skin = SKINS.find((s) => s.id === skinId);
+      if (!skin) return;
+      openModal({
+        visualBg: skin.bg,
+        visualHtml: skin.svg,
+        kicker: `INSPECTOR DE SKIN · ${skin.rarity.toUpperCase()}`,
+        title: skin.name,
+        metaItems: [
+          { label: 'Rareza Oficial', value: `${skin.rarity} (${skin.rarityHex})` },
+          { label: 'Colección / Origen', value: skin.collection },
+          { label: 'Rango de Float', value: skin.floatRange },
+          { label: 'Valoración Histórica', value: skin.price }
+        ],
+        quote: '',
+        desc: skin.details
+      });
+    };
+
+    window.openPlayerModal = function (playerId) {
+      const p = PLAYERS.find((x) => x.id === playerId);
+      if (!p) return;
+      const badgeSvg = `
+        <svg viewBox="0 0 320 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="160" cy="55" r="44" fill="rgba(15,18,21,0.55)" stroke="${p.accent}" stroke-width="2.5"/>
+          <circle cx="160" cy="55" r="34" stroke="${p.accent}" stroke-opacity="0.4" stroke-dasharray="4 4"/>
+          <text x="160" y="63" text-anchor="middle" fill="#fff" font-family="Rajdhani, sans-serif" font-size="28" font-weight="700">${p.nick.toUpperCase()}</text>
+          <text x="160" y="82" text-anchor="middle" fill="${p.accent}" font-family="monospace" font-size="11" font-weight="700">${p.country} · ${p.role.toUpperCase()}</text>
+        </svg>
+      `;
+      openModal({
+        visualBg: `linear-gradient(135deg, #141922 0%, #232b38 55%, ${p.accent}33 100%)`,
+        visualHtml: badgeSvg,
+        kicker: `SALÓN DE LA FAMA · ${p.era}`,
+        title: `${p.nick} (${p.fullName})`,
+        metaItems: [
+          { label: 'Rol Táctico', value: p.role },
+          { label: 'Equipos Icónicos', value: p.teams },
+          { label: 'Títulos Major', value: p.majors },
+          { label: 'Reconocimiento HLTV', value: p.hltv }
+        ],
+        quote: '',
+        desc: p.details
+      });
+    };
+
+    /* =====================================================================
+       EVENT LISTENERS GLOBALES
+    ===================================================================== */
+    document.querySelectorAll('[data-cat]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setCategory(btn.dataset.cat);
+        document.getElementById('leftSidebar').classList.remove('mobile-open');
+      });
+    });
+
+    document.querySelectorAll('[data-sort]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.sort = btn.dataset.sort;
+        document.querySelectorAll('[data-sort]').forEach((b) => b.classList.toggle('active', b === btn));
+        renderThreads();
+      });
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+
+    function handleSearchUpdate() {
+      state.search = searchInput.value;
+      searchClear.classList.toggle('visible', state.search.length > 0);
+      renderThreads();
+    }
+
+    searchInput.addEventListener('input', handleSearchUpdate);
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      handleSearchUpdate();
+      searchInput.focus();
+    });
+
+    document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+      searchInput.value = '';
+      state.search = '';
+      searchClear.classList.remove('visible');
+      setCategory('all');
+    });
+
+    document.getElementById('brandReset').addEventListener('click', (e) => {
+      e.preventDefault();
+      searchInput.value = '';
+      state.search = '';
+      searchClear.classList.remove('visible');
+      setCategory('all');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('nextFactBtn').addEventListener('click', () => {
+      state.factIndex = (state.factIndex + 1) % FUN_FACTS.length;
+      renderSidebarWidgets();
+    });
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+      const sb = document.getElementById('leftSidebar');
+      const open = sb.classList.toggle('mobile-open');
+      document.getElementById('mobileMenuBtn').setAttribute('aria-expanded', String(open));
+    });
+
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) {
+        closeModal();
+      } else if (e.key === '/' && document.activeElement !== searchInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    /* ================= INICIALIZACIÓN ================= */
+    renderSidebarWidgets();
+    renderThreads();
+  </script>
+</body>
+</html>
